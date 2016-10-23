@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="district10" />
+    <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
+    <link rel="stylesheet" href="$rootdir$main.css" type="text/css" />
+$if(math)$
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+$endif$
+</head>
+<body class="markdown-body">
+$body$
+<script src="$rootdir$lazyload.min.js"></script>
+<script src="$rootdir$jquery-3.0.0.min.js"></script>
+<script src="$rootdir$main.js"></script>
+</body>
+</html>
