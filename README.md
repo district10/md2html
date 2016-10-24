@@ -6,7 +6,11 @@
 
 ### 安装 perl、pandoc 和 make
 
-Pandoc 用来转化 markdown 到 html，下载地址：<http://doi-2014.qiniudn.com/pandoc/pandoc-1.17.0.2-windows.msi> (20.4 MB)
+Pandoc 用来转化 markdown 到 html，下载地址：
+
+-   <http://doi-2014.qiniudn.com/pandoc/pandoc-1.17.0.2-windows.msi> (20.4 MB)
+-   <https://github.com/jgm/pandoc/releases/download/1.17/pandoc-1.17-1-amd64.deb> (19.9 MB)，安装 `sudo dpkg -i pandoc*.deb`
+-   <https://github.com/jgm/pandoc/releases/download/1.17.2/pandoc-1.17.2-osx.pkg> (35.9 MB)
 
 Perl 已经包含在 git for windows 里了，不过可能需要手工添加到 %PATH%，到文件夹下找找，看看 CMD 里 `perl -v` 有没有反应。
 
