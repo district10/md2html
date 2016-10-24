@@ -27,7 +27,8 @@ Perl 已经包含在 git for windows 里了，不过可能需要手工添加到 
 
 按照上面安装 pandoc。
 
-运行 `java -jar md2html.jar`，会把当前目录的 markdown 文件转化为 html。
+在 Release 页面下载 md2html.jar 文件，运行之：`java -jar md2html.jar`。会把当前
+目录的 markdown 文件转化为 html。
 输出到 `../publish-md2html`。
 
 这几个文档是一个示例：
