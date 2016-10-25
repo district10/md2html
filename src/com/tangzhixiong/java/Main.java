@@ -15,13 +15,12 @@ class Bundle {
 
 public class Main {
     public static WatchService watchService;
-    // shitshit public static WatchService watchService = FileSystems.getDefault().newWatchService();
     public static String rootStr;
     public static String repoStr;
     public static String distStr;
     public static String htmlTemplatePath;
     public static Runtime runtime;
-    public static final String staticsDir = ".md2html";
+    public static final String staticsDir = "_md2html";
     public static final String[] resources = {
             "cat.pl",
             "drawer.pl",
@@ -121,7 +120,7 @@ public class Main {
                 if (input.endsWith(".md")) {
                     String cmd = String.format( "pandoc -S -s --ascii --mathjax " +
                             "-f markdown+abbreviations+east_asian_line_breaks+emoji " +
-                            "-V rootdir=./%s.md2html/ --template %s " +
+                            "-V rootdir=./%s_md2html/ --template %s " +
                             "%s -o %s",
                             resolvedPath(output), htmlTemplatePath,
                             input, output);
