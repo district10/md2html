@@ -11,9 +11,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Vector;
 
-/**
- * Created by tzx on 2016/10/25.
- */
 public class Bundle {
 
     public static String srcDir;
@@ -50,20 +47,14 @@ public class Bundle {
         return path;
     }
 
-    public static String resolveToRoot(String path) {
-        String frag = path.substring(dstDir.length()+1);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < frag.length(); ++i) {
-            if (String.valueOf(frag.charAt(i)).equals(File.separator)) {
-                sb.append("../");
-            }
-        }
-        return sb.toString();
-    }
-
     public static void fillBundle(String srcDirPath, String dstDirPath) throws Exception {
         srcDir = srcDirPath;
         dstDir = dstDirPath;
+        if (dstDir.startsWith(srcDir+File.separator)) {
+            System.err.printf("input: '%s' -> output: '%s'\n", srcDir, dstDir);
+            System.err.println("Output directory is subdirectory of input directory. Exit now.");
+            System.exit(1);
+        }
         resourcePath = dstDir+File.separator+ resourceDirName;
         htmltemplatePath = resourcePath+File.separator+htmltemplateRes;
         dotmd2htmlymlPath = resourcePath+File.separator+md2htmlymlRes;

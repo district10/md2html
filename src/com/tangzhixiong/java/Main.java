@@ -59,9 +59,9 @@ public class Main {
             for (String res: Bundle.resources) {
                 extractResourceFile("/"+res, Bundle.resourcePath+File.separator+res);
             }
-            for (String input : Bundle.src2dst.keySet()) {
-                String output = Bundle.src2dst.get(input);
-                Utility.mappingFile(input, output); // copy or convert, if needed
+            for (String src: Bundle.src2dst.keySet()) {
+                String dst = Bundle.src2dst.get(src);
+                Utility.mappingFile(src, dst); // copy or convert, if needed
             }
 
             // String files = DirectoryListing.listing();
@@ -77,7 +77,6 @@ public class Main {
                     e.printStackTrace();
                     continue;
                 }
-                curTimeStamp = System.currentTimeMillis();
                 if (key == null || !Bundle.key2dir.containsKey(key)) {
                     continue;
                 }
@@ -94,7 +93,8 @@ public class Main {
                     }
                     String input = hit.getCanonicalPath();
                     String output = "";
-                    if (input.equals(lastInput) && curTimeStamp - prevTimeStamp < 100) {
+                    curTimeStamp = System.currentTimeMillis();
+                    if (input.equals(lastInput) && curTimeStamp - prevTimeStamp < 100) { // 0.1 second
                         continue;
                     } else {
                         lastInput = input;
