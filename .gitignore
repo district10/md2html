@@ -1,4 +1,6 @@
-out/*
-.idea/*
-*.jar
 *.class
+*.jar
+*.zip
+.idea/*
+md2html/*
+out/*
