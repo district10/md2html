@@ -1,0 +1,5 @@
+generator: md2html
+keywords:
+  - pandoc
+  - markdown
+  - watch
