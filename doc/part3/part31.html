@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="district10" />
+    <title></title>
+    <link rel="stylesheet" href="./../../.md2html/main.css" type="text/css" />
+</head>
+<body class="markdown-body">
+<h2 id="part-3.1-&#20840;&#37096;&#28304;&#30721;">Part 3.1 &#20840;&#37096;&#28304;&#30721;</h2>
+<p><a href="../../README.md">&#22238;&#21040;&#19978;&#32423;</a></p>
+<div class="sourceCode"><pre class="sourceCode java"><code class="sourceCode java"><span class="kw">package com.tangzhixiong.java;</span>
+
+<span class="kw">import java.io.*;</span>
+<span class="kw">import java.nio.file.*;</span>
+<span class="kw">import java.util.*;</span>
+
+<span class="kw">class</span> Bundle {
+    <span class="dt">final</span> <span class="kw">public</span> HashMap&lt;String, String&gt; src2dst;
+    <span class="dt">final</span> <span class="kw">public</span> HashMap&lt;WatchKey, File&gt; key2dir;
+    <span class="kw">public</span> <span class="fu">Bundle</span>() {
+        src2dst = <span class="kw">new</span> HashMap&lt;&gt;();
+        key2dir = <span class="kw">new</span> HashMap&lt;&gt;();
+    }
+}
+
+<span class="kw">public</span> <span class="kw">class</span> Main {
+    <span class="kw">public</span> <span class="dt">static</span> WatchService watchService;
+    <span class="co">// shitshit public static WatchService watchService = FileSystems.getDefault().newWatchService();</span>
+    <span class="kw">public</span> <span class="dt">static</span> String rootStr;
+    <span class="kw">public</span> <span class="dt">static</span> String repoStr;
+    <span class="kw">public</span> <span class="dt">static</span> String distStr;
+    <span class="kw">public</span> <span class="dt">static</span> String htmlTemplatePath;
+    <span class="kw">public</span> <span class="dt">static</span> Runtime runtime;
+    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">final</span> String staticsDir = <span class="st">&quot;.md2html&quot;</span>;
+    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">final</span> String[] resources = {
+            <span class="st">&quot;cat.pl&quot;</span>,
+            <span class="st">&quot;drawer.pl&quot;</span>,
+            <span class="st">&quot;html.template&quot;</span>,
+            <span class="st">&quot;jquery-3.0.0.min.js&quot;</span>,
+            <span class="st">&quot;lazyload.min.js&quot;</span>,
+            <span class="st">&quot;main.css&quot;</span>,
+            <span class="st">&quot;main.js&quot;</span>,
+            <span class="st">&quot;README.txt&quot;</span>,
+    };
+
+    <span class="co">// @mkdir -p $(@D)</span>
+    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">mkdirHyphenPDollarAtD</span>(File dest) {
+        File atd = dest.<span class="fu">getParentFile</span>();
+        <span class="kw">if</span> (!atd.<span class="fu">exists</span>()) {
+            atd.<span class="fu">mkdirs</span>();
+        }
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> String <span class="fu">mapToOutputPath</span>(String inputPath) {
+        String outputPath = distStr + inputPath.<span class="fu">substring</span>(rootStr.<span class="fu">length</span>()+<span class="dv">1</span>+repoStr.<span class="fu">length</span>()+<span class="dv">1</span>);
+        <span class="kw">if</span> (outputPath.<span class="fu">endsWith</span>(<span class="st">&quot;.md&quot;</span>)) {
+            outputPath = outputPath.<span class="fu">substring</span>(<span class="dv">0</span>, outputPath.<span class="fu">length</span>()-<span class="dv">3</span>) + <span class="st">&quot;.html&quot;</span>;
+        }
+        <span class="kw">return</span> outputPath;
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> Bundle <span class="fu">getBundle</span>(String dirName) {
+        Bundle bundle = <span class="kw">new</span> <span class="fu">Bundle</span>();
+        File dir = <span class="kw">new</span> File(dirName);
+        <span class="kw">if</span> (!dir.<span class="fu">isDirectory</span>()) {
+            <span class="kw">return</span> bundle;
+        }
+        ArrayDeque&lt;File&gt; dirs = <span class="kw">new</span> ArrayDeque&lt;&gt;();
+        dirs.<span class="fu">push</span>(dir);
+        <span class="co">// bundle.dirs.add(dir);</span>
+        <span class="kw">while</span> (!dirs.<span class="fu">isEmpty</span>()) {
+            File file = dirs.<span class="fu">pop</span>();
+            <span class="kw">if</span> (file.<span class="fu">isFile</span>()) {
+                <span class="kw">try</span> {
+                    String inputPath = file.<span class="fu">getCanonicalPath</span>();
+                    bundle.<span class="fu">src2dst</span>.<span class="fu">put</span>(inputPath, <span class="fu">mapToOutputPath</span>(inputPath));
+                }
+                <span class="kw">catch</span> (IOException e) {
+                    e.<span class="fu">printStackTrace</span>();
+                }
+            } <span class="kw">else</span> <span class="kw">if</span> (file.<span class="fu">isDirectory</span>()) {
+                <span class="kw">try</span> {
+                    WatchKey key = file.<span class="fu">toPath</span>().<span class="fu">register</span>(watchService
+                            , StandardWatchEventKinds.<span class="fu">ENTRY_MODIFY</span>
+                            , StandardWatchEventKinds.<span class="fu">ENTRY_CREATE</span> );
+                    bundle.<span class="fu">key2dir</span>.<span class="fu">put</span>(key, file);
+                    <span class="co">// System.out.printf(&quot;Watching %s...\n&quot;, f.getCanonicalPath());</span>
+                }
+                <span class="kw">catch</span> (IOException e) {
+                    e.<span class="fu">printStackTrace</span>();
+                }
+                <span class="kw">for</span> (File f : file.<span class="fu">listFiles</span>()) {
+                    <span class="kw">if</span> (f.<span class="fu">isFile</span>()) {
+                        <span class="kw">try</span> {
+                            String inputPath = f.<span class="fu">getCanonicalPath</span>();
+                            bundle.<span class="fu">src2dst</span>.<span class="fu">put</span>(inputPath, <span class="fu">mapToOutputPath</span>(inputPath));
+                        }
+                        <span class="kw">catch</span> (IOException e) {
+                            e.<span class="fu">printStackTrace</span>();
+                        }
+                    } <span class="kw">else</span> <span class="kw">if</span> (f.<span class="fu">isDirectory</span>()) {
+                        String basename = f.<span class="fu">getName</span>();
+                        <span class="kw">if</span> (!basename.<span class="fu">startsWith</span>(<span class="st">&quot;.&quot;</span>)) {
+                            dirs.<span class="fu">add</span>(f);
+                        }
+                    }
+                }
+            }
+        }
+        <span class="kw">return</span> bundle;
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> String <span class="fu">resolvedPath</span>(String output) {
+        String frag = output.<span class="fu">substring</span>(distStr.<span class="fu">length</span>());
+        StringBuilder sb = <span class="kw">new</span> StringBuilder();
+        <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; frag.<span class="fu">length</span>(); ++i) {
+            <span class="kw">if</span> (String.<span class="fu">valueOf</span>(frag.<span class="fu">charAt</span>(i)).<span class="fu">equals</span>(File.<span class="fu">separator</span>)) {
+                sb.<span class="fu">append</span>(<span class="st">&quot;../&quot;</span>);
+            }
+        }
+        <span class="kw">return</span> sb.<span class="fu">toString</span>();
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">mappingFile</span>(String input, String output) {
+        System.<span class="fu">out.printf</span>(<span class="st">&quot;</span><span class="ch">%s</span><span class="st"> -&gt; </span><span class="ch">%s\n</span><span class="st">&quot;</span>, input, output);
+        File inputFile = <span class="kw">new</span> File(input);
+        File outputFile = <span class="kw">new</span> File(output);
+        <span class="kw">if</span> (!outputFile.<span class="fu">exists</span>() || inputFile.<span class="fu">lastModified</span>() &gt; outputFile.<span class="fu">lastModified</span>()) {
+            <span class="fu">mkdirHyphenPDollarAtD</span>(outputFile);
+            <span class="kw">try</span> {
+                <span class="kw">if</span> (input.<span class="fu">endsWith</span>(<span class="st">&quot;.md&quot;</span>)) {
+                    String cmd = String<span class="fu">.format</span>( <span class="st">&quot;pandoc -S -s --ascii --mathjax &quot;</span> +
+                            <span class="st">&quot;-f markdown+abbreviations+east_asian_line_breaks+emoji &quot;</span> +
+                            <span class="st">&quot;-V rootdir=./</span><span class="ch">%s</span><span class="st">.md2html/ --template </span><span class="ch">%s</span><span class="st"> &quot;</span> +
+                            <span class="st">&quot;</span><span class="ch">%s</span><span class="st"> -o </span><span class="ch">%s</span><span class="st">&quot;</span>,
+                            <span class="fu">resolvedPath</span>(output), htmlTemplatePath,
+                            input, output);
+                    <span class="co">// System.out.printf(&quot;Converting from &#39;%s&#39; to &#39;%s&#39; via `%s`\n&quot;, input, output, cmd);</span>
+                    runtime.<span class="fu">exec</span>(cmd);
+                } <span class="kw">else</span> <span class="kw">if</span> (<span class="kw">false</span> &amp;&amp; input.<span class="fu">endsWith</span>(<span class="st">&quot;.java&quot;</span>)) {
+                    <span class="co">/*</span>
+<span class="co">                    outputFile.mkdirs();</span>
+<span class="co">                    String indexPath = outputFile.getCanonicalPath()+File.separator+&quot;index.md&quot;;</span>
+<span class="co">                    PrintStream ps = new PrintStream(new FileOutputStream(indexPath));</span>
+<span class="co">                    FileInputStream fis = new FileInputStream(inputFile);</span>
+<span class="co">                    byte[] bbuf = new byte[1024];</span>
+<span class="co">                    int hasRead = 0;</span>
+<span class="co">                    while ((hasRead = fis.read(bbuf)) &gt; 0) {</span>
+<span class="co">                        ps.print(new String(bbuf, 0, hasRead));</span>
+<span class="co">                    }</span>
+<span class="co">                    // mappingFile(indexPath, mapping);</span>
+<span class="co">                    */</span>
+                } <span class="kw">else</span> {
+                    <span class="co">// System.out.printf(&quot;Copying from &#39;%s&#39; to &#39;%s&#39;\n&quot;, input, output);</span>
+                    <span class="fu">mkdirHyphenPDollarAtD</span>(outputFile);
+                    Files.<span class="fu">copy</span>(<span class="kw">new</span> File(input).<span class="fu">toPath</span>(), outputFile.<span class="fu">toPath</span>()
+                            , StandardCopyOption.<span class="fu">REPLACE_EXISTING</span>
+                            , StandardCopyOption.<span class="fu">COPY_ATTRIBUTES</span> );
+                }
+            }
+            <span class="kw">catch</span> (IOException e) {
+                e.<span class="fu">printStackTrace</span>();
+            }
+        }
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">extractResourceFile</span>(String res, String path) {
+        File outputFile = <span class="kw">new</span> File(path);
+        <span class="fu">mkdirHyphenPDollarAtD</span>(outputFile);
+        <span class="kw">try</span> (
+                InputStream is = Main.<span class="fu">class</span>.<span class="fu">getResourceAsStream</span>(res);
+                FileOutputStream fos = <span class="kw">new</span> FileOutputStream(outputFile);
+        ) {
+            <span class="kw">if</span> (is == <span class="kw">null</span>) {
+                System.<span class="fu">err</span>.<span class="fu">println</span>(<span class="st">&quot;shit&quot;</span> + res);
+                <span class="kw">return</span>;
+            }
+            <span class="dt">byte</span>[] bbuf = <span class="kw">new</span> <span class="dt">byte</span>[<span class="dv">1024</span>];
+            <span class="dt">int</span> hasRead = <span class="dv">0</span>;
+            <span class="kw">while</span> ((hasRead = is.<span class="fu">read</span>(bbuf)) &gt; <span class="dv">0</span>) {
+                fos.<span class="fu">write</span>(bbuf, <span class="dv">0</span>, hasRead) ;
+            }
+        }
+        <span class="kw">catch</span> (IOException e) {
+            e.<span class="fu">printStackTrace</span>();
+        }
+    }
+
+    <span class="kw">public</span> <span class="dt">static</span> <span class="dt">void</span> <span class="fu">main</span>(String[] args) <span class="kw">throws</span> IOException {
+        watchService = FileSystems.<span class="fu">getDefault</span>().<span class="fu">newWatchService</span>();
+        runtime = Runtime.<span class="fu">getRuntime</span>();
+        rootStr = <span class="kw">new</span> File(<span class="st">&quot;..&quot;</span>).<span class="fu">getCanonicalPath</span>();
+        repoStr = <span class="kw">new</span> File(<span class="st">&quot;.&quot;</span>).<span class="fu">getCanonicalPath</span>();
+        repoStr = repoStr.<span class="fu">substring</span>(<span class="dv">1</span>+repoStr.<span class="fu">lastIndexOf</span>(File.<span class="fu">separator</span>));
+        distStr = rootStr + File.<span class="fu">separator</span> + <span class="st">&quot;publish-&quot;</span> + repoStr + File.<span class="fu">separator</span>;
+        htmlTemplatePath = distStr+File.<span class="fu">separator</span>+staticsDir+File.<span class="fu">separator</span>+<span class="st">&quot;html.template&quot;</span>;
+        <span class="kw">for</span> (String res: resources) {
+            <span class="fu">extractResourceFile</span>(<span class="st">&quot;/&quot;</span>+res, distStr+File.<span class="fu">separator</span>+staticsDir+File.<span class="fu">separator</span>+res);
+        }
+        <span class="kw">try</span> {
+            Bundle bundle = <span class="fu">getBundle</span>(<span class="st">&quot;.&quot;</span>);
+            <span class="kw">for</span> (String input : bundle.<span class="fu">src2dst</span>.<span class="fu">keySet</span>()) {
+                String output = bundle.<span class="fu">src2dst</span>.<span class="fu">get</span>(input);
+                <span class="fu">mappingFile</span>(input, output); <span class="co">// copy or convert, if needed</span>
+            }
+
+            <span class="dt">long</span> prevTimeStamp = System.<span class="fu">currentTimeMillis</span>(), curTimeStamp;
+            String lastInput = <span class="st">&quot;&quot;</span>;
+            <span class="dt">int</span> i = <span class="dv">0</span>;
+            <span class="kw">while</span> (<span class="kw">true</span>) {
+                WatchKey key = <span class="kw">null</span>;
+                <span class="kw">try</span> {
+                    key = watchService.<span class="fu">take</span>();
+                } <span class="kw">catch</span> (InterruptedException e) {
+                    e.<span class="fu">printStackTrace</span>();
+                }
+                <span class="kw">if</span> (key == <span class="kw">null</span>) { <span class="kw">continue</span>; }
+                curTimeStamp = System.<span class="fu">currentTimeMillis</span>();
+                <span class="kw">for</span> (WatchEvent&lt;?&gt; event : key.<span class="fu">pollEvents</span>()) {
+                    <span class="co">// if (event.kind() != StandardWatchEventKinds.ENTRY_MODIFY) { continue; }</span>
+                    <span class="co">// System.out.println(&quot;watched out at :&quot; + dir);</span>
+                    File hitfile = <span class="kw">new</span> File( String<span class="fu">.format</span>(
+                                    <span class="st">&quot;</span><span class="ch">%s%s%s</span><span class="st">&quot;</span>,
+                                    bundle.<span class="fu">key2dir</span>.<span class="fu">get</span>(key).<span class="fu">toPath</span>().<span class="fu">toAbsolutePath</span>(), <span class="co">// dir</span>
+                                    File.<span class="fu">separator</span>,
+                                    ((WatchEvent&lt;Path&gt;) event).<span class="fu">context</span>().<span class="fu">toFile</span>().<span class="fu">getName</span>())); <span class="co">// file</span>
+                    <span class="kw">if</span> (!hitfile.<span class="fu">isFile</span>() || !hitfile.<span class="fu">exists</span>()) {
+                        <span class="kw">continue</span>;
+                    }
+                    String input = hitfile.<span class="fu">getCanonicalPath</span>();
+                    String output = <span class="st">&quot;&quot;</span>;
+                    <span class="kw">if</span> (input.<span class="fu">equals</span>(lastInput) &amp;&amp; curTimeStamp - prevTimeStamp &lt; <span class="dv">100</span>) {
+                        <span class="kw">continue</span>;
+                    } <span class="kw">else</span> {
+                        lastInput = input;
+                        prevTimeStamp = curTimeStamp;
+                    }
+                    <span class="kw">if</span> (bundle.<span class="fu">src2dst</span>.<span class="fu">keySet</span>().<span class="fu">contains</span>(input)) {
+                        output = bundle.<span class="fu">src2dst</span>.<span class="fu">get</span>(input);
+                        <span class="fu">mappingFile</span>(input, output);
+                    }
+                }
+                <span class="dt">boolean</span> valid = key.<span class="fu">reset</span>();
+                <span class="kw">if</span> (!valid) {
+                    <span class="kw">break</span>;
+                }
+            }
+        }
+        <span class="kw">catch</span> (Exception e ) {
+            e.<span class="fu">printStackTrace</span>();
+        }
+    }
+}</code></pre></div>
+<script src="./../../.md2html/lazyload.min.js"></script>
+<script src="./../../.md2html/jquery-3.0.0.min.js"></script>
+<script src="./../../.md2html/main.js"></script>
+</body>
+</html>
