@@ -28,3 +28,11 @@ publish/%: %
 publish/%: tools/%
 	@mkdir -p $(@D)
 	cp $< $@
+
+md2html:
+	mkdir -p md2html
+	javac src/com/tangzhixiong/java/Main.java -d md2html
+	mkdir -p md2html/META-INF
+	cp src/META-INF/MANIFEST.MF md2html/META-INF
+	cp tools/* md2html/
+	#tar cf ../md2html.zip -C md2html .
