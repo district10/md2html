@@ -209,6 +209,7 @@ public class Main {
                 for (WatchEvent<?> event : key.pollEvents()) {
                     // if (event.kind() != StandardWatchEventKinds.ENTRY_MODIFY) { continue; }
                     // System.out.println("watched out at :" + dir);
+                    @SuppressWarnings (value="unchecked")
                     File hitfile = new File( String.format(
                                     "%s%s%s",
                                     bundle.key2dir.get(key).toPath().toAbsolutePath(), // dir
