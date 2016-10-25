@@ -36,19 +36,19 @@ Java 版跨平台，只需要安装 Pandoc。而且会监控文件夹，在修�
 如果你安装了浏览器自动更新的插件，比如 [Auto Reload :: Firefox 附加组件](https://addons.mozilla.org/zh-CN/firefox/addon/auto-reload/?src=api)，
 还可以自动刷新。这样，把浏览器和编辑器对半放，然后运行 jar 程序，就可以实时预览了~
 
-在 Release 页面下载 md2html.jar 文件，运行之：`java -jar md2html.jar`。会把当前
-目录的 markdown 文件转化为 html。输出到 `../publish-md2html`。
-
-下载本 repo 和 [md2html](https://github.com/district10/md2html/releases/download/v0.1/md2html.jar)，然后把 jar 文件放到根目录，然后双击（如果 jar 文件关联了 java 运行）或者 `java -jar md2html.jar`，
+下载本 repo 和 [md2html](https://github.com/district10/md2html/releases/download/v0.1/md2html.jar)，
+然后把 jar 文件放到根目录，然后双击（如果 jar 文件关联了 java 运行）或者 `java -jar md2html.jar`，
 就有 `../publish-md2html` 文件夹。打开里面的 README.html 看效果。
 
-这几个文档是一个示例：（
+这几个文档是一个示例：
 
 -   [part1](doc/part1.md)
 -   [part2](doc/part2.md)
 -   part3
     -   [part31](doc/part3/part31.md)
     -   [part32](doc/part3/part32.md)
+
+（生成的 HTML 会自动转化 `.md` 路径为 `.html`。）
 
 ## Credits
 
