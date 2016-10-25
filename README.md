@@ -61,6 +61,12 @@ $ java -jar md2html.jar -i source_dir -o publish_dir
 $ java -jar md2html.jar -input source_dir -output publish_dir
 ```
 
+`md2html.jar` 的打包:
+
+方法 1, 用 IntelliJ IDEA.
+
+方法 2, 在目录下 `make md2html.jar` (linux 上测试通过)
+
 ## Credits
 
 -   Pandoc: <https://github.com/jgm/pandoc>
