@@ -1,7 +1,6 @@
 package com.tangzhixiong.java;
 
 import com.sun.jmx.remote.internal.ArrayQueue;
-// TODO: 生成目录结构。共前端使用。
 
 import java.io.*;
 import java.util.ArrayDeque;

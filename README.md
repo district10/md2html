@@ -2,55 +2,33 @@
 
 把文件夹下的 Markdown 文件，转化成 GitHub 风格的 HTML。
 
-## 1. 脚本版
-
-（推荐使用 [Java 版](#java-版) 的。）
-
-### 安装 perl、pandoc 和 make
-
-Pandoc 用来转化 markdown 到 html，下载地址：
-
--   <http://doi-2014.qiniudn.com/pandoc/pandoc-1.17.0.2-windows.msi> (20.4 MB)
--   <https://github.com/jgm/pandoc/releases/download/1.17/pandoc-1.17-1-amd64.deb> (19.9 MB)，安装 `sudo dpkg -i pandoc*.deb`
--   <https://github.com/jgm/pandoc/releases/download/1.17.2/pandoc-1.17.2-osx.pkg> (35.9 MB)
-
-Perl 已经包含在 git for windows 里了，不过可能需要手工添加到 %PATH%，到文件夹下找找，看看 CMD 里 `perl -v` 有没有反应。
-
-安装 `make`，下载地址：<https://github.com/whudoc/statics/raw/master/winbin/make.exe> (218 KB)，放到 PATH 里即可
-
-### 一个例子
+### 应用举例
 
 比如 @judasn 的 [judasn/IntelliJ-IDEA-Tutorial: IntelliJ IDEA 简体中文专题教程](https://github.com/judasn/IntelliJ-IDEA-Tutorial)。
 首先下载它的源码，解压后进入文件夹 `IntelliJ-IDEA-Tutorial`。
 
-然后下载本 repo，把 `tools` 文件夹和 `Makefile` 文件拷贝到 `IntelliJ-IDEA-Tutorial` 文件夹，
-然后在命令行下运行 `make`。
+下载 [`md2html.jar`](https://github.com/district10/md2html/releases)，然后把 `jar` 文件放到根目录，
+然后运行 `java -jar md2html.jar`（双击的话，就看不到 log，也不能用 Control-C 停止它），就有
+`../md2html-publish` 文件夹。打开里面的 `README.html` 看效果。
 
-即有 `publish` 文件夹。里面是生成的 HTML。
-打开里面的 index.html：<http://whudoc.qiniudn.com/2016/IntelliJ-IDEA-Tutorial> （我同步到了网盘）。
+我把生成的网页上传到了网盘，在线查看：<http://whudoc.qiniudn.com/2016/IntelliJ-IDEA-Tutorial>。
 
-## 2. Java 版
+注：生成的 HTML 会自动转化 `.md` 路径为 `.html`。
 
-Java 版跨平台，只需要安装 Pandoc。而且会监控文件夹，在修改后会自动更新 HTML。
+## 安装使用
 
-如果你安装了浏览器自动更新的插件，比如 [Auto Reload :: Firefox 附加组件](https://addons.mozilla.org/zh-CN/firefox/addon/auto-reload/?src=api)，
-还可以自动刷新。这样，把浏览器和编辑器对半放，然后运行 jar 程序，就可以实时预览了~
+`jar` 文件的运行，需要 JRE（Java Runtime）的支持，可以在这里下载：[Download Free Java Software](https://java.com/en/download/)。
 
-下载本 repo 和 [`md2html.jar`](https://github.com/district10/md2html/releases)，然后把 jar
-文件放到根目录，然后运行 `java -jar md2html.jar`（双击的话，就看不到 log，也不能用 Control-C 停止它），就有
-`../md2html-publish` 文件夹。打开里面的 README.html 看效果。
+Pandoc 是内部用来转化 Markdown 的工具，下载地址：
 
-这几个文档是一个示例：（测试多层目录和目录间的跳转）
+-   Windows：<http://doi-2014.qiniudn.com/pandoc/pandoc-1.17.0.2-windows.msi> (20.4 MB)
+-   Linux：<https://github.com/jgm/pandoc/releases/download/1.17/pandoc-1.17-1-amd64.deb> (19.9 MB)，安装指令：`sudo dpkg -i pandoc*.deb`
+-   Mac OSX：<https://github.com/jgm/pandoc/releases/download/1.17.2/pandoc-1.17.2-osx.pkg> (35.9 MB)
 
--   [part1](doc/part1.md)
--   [part2](doc/part2.md)
--   part3
-    -   [part31](doc/part3/part31.md)
-    -   [part32](doc/part3/part32.md)
+### `md2html.jar` 使用
 
-（生成的 HTML 会自动转化 `.md` 路径为 `.html`。）
-
-`md2html.jar` 的用法如下：
+除了 `java -jar md2html.jar` 这种简单的使用，还可以指定一些参数，比如输入目录和输出目录，
+下面是使用方法：
 
 ```bash
 # 当前文件夹拷贝到 ../<当前文件夹名称>-publish，并转化其中的 .md 文件
@@ -61,19 +39,28 @@ $ java -jar md2html.jar -i source_dir -o publish_dir
 $ java -jar md2html.jar -input source_dir -output publish_dir
 ```
 
-`md2html.jar` 的打包:
+如果安装了浏览器自动更新的插件，比如 [Auto Reload :: Firefox 附加组件](https://addons.mozilla.org/zh-CN/firefox/addon/auto-reload/?src=api)，
+还可以自动刷新。这样，把浏览器和编辑器对半放，然后运行 `jar` 程序，就可以实时预览了~
 
-方法 1, 用 IntelliJ IDEA.
+### `md2html.jar` 的打包:
 
-方法 2, 在目录下 `make md2html.jar` (linux 上测试通过)
+#### 方法 1，利用 IntelliJ IDEA 的 Artifact
+
+用 IntelliJ IDEA 打开这个工程应该就可以生成 `md2html.jar`。
+
+#### 方法 2，利用 Makefile 打包
+
+如果没有 `make`，安装之，下载地址：<https://github.com/whudoc/statics/raw/master/winbin/make.exe> (218 KB)，放到 %PATH%（比如 `C:\Windows\System32`）里即可。
+
+如果没有 `zip`，安装之，下载地址：<https://github.com/whudoc/statics/raw/master/winbin/zip.exe> (298 KB)，放到 %PATH% 里即可。
+
+最后，`make md2html.jar`，当前目录即有文件 `md2html.jar`。
+
+（在 Windows 和 Linux 上测试通过，均可以正确生成 `jar` 包。）
 
 ## Credits
 
--   Pandoc: <https://github.com/jgm/pandoc>
--   Github Markdown CSS: <https://github.com/sindresorhus/github-markdown-css>
--   jQuery
--   lazyload.js
-
-## Notes
-
-还可以把 CSS、JavaScript 以及图片打包到 HTML 里，可以把 `--mathjax` 去掉，再加上 `--self-contained`。
+-   [Pandoc](https://github.com/jgm/pandoc)（Markdown 转化）
+-   [Github Markdown CSS](https://github.com/sindresorhus/github-markdown-css)（Github 风格的 CSS）
+-   jQuery，lazyload.js（图片延迟加载）
+-   [我的笔记本](http://tangzx.qiniudn.com/notes/)（使用类似方法生成的 HTML，我复用了自己笔记的 js，css 以及 HTML 模板）
