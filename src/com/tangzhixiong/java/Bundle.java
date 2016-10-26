@@ -1,5 +1,6 @@
 package com.tangzhixiong.java;
 
+import javax.rmi.CORBA.Util;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -37,15 +38,6 @@ public class Bundle {
     public static String resourcePath;
     public static String htmltemplatePath;
     public static String dotmd2htmlymlPath;
-
-    public static String mapToOutputPath(String basename, String dirname) {
-        // int cut = rootStr.length()+1+repoStr.length()+1;
-        String path = dirname + File.separator + basename;
-        if (path.endsWith(".md")) {
-            path = path.substring(0, path.length()-3) + ".html";
-        }
-        return path;
-    }
 
     public static void fillBundle(String srcDirPath, String dstDirPath) throws Exception {
         srcDir = srcDirPath;
@@ -99,7 +91,7 @@ public class Bundle {
             for (final File entry: entries) {
                 if (entry.isFile()) {
                     final String src = entry.getCanonicalPath();
-                    src2dst.put(src, mapToOutputPath(src.substring(srcDir.length()+1), dstDir));
+                    src2dst.put(src, dstDir + File.separator + src.substring(srcDir.length()+1));
                 } else if (entry.isDirectory()) {
                     final String basename = entry.getName();
                     if (!basename.startsWith(".")) {
@@ -107,6 +99,9 @@ public class Bundle {
                     }
                 }
             }
+        }
+        for (String dir: key2dir.values()) {
+            // TODO: if no index.html was generated, generate it!
         }
     }
 

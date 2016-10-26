@@ -78,4 +78,6 @@ function foldAll() {
     $('dt.drawerOpen').removeClass('drawerOpen').addClass('drawerClose').next('dd').addClass('drawerHide');
 }
 
-$('body').addClass('foldable').removeClass('locked');
+function loadFragment(url) {
+    $('body.markdown-body').load( url );
+}

@@ -64,3 +64,7 @@ $ java -jar md2html.jar -input source_dir -output publish_dir
 -   [Github Markdown CSS](https://github.com/sindresorhus/github-markdown-css)（Github 风格的 CSS）
 -   jQuery，lazyload.js（图片延迟加载）
 -   [我的笔记本](http://tangzx.qiniudn.com/notes/)（使用类似方法生成的 HTML，我复用了自己笔记的 js，css 以及 HTML 模板）
+
+## TEST
+
+@include <-=demo/doc1.md=

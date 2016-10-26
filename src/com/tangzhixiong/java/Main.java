@@ -4,16 +4,14 @@ import java.io.*;
 import java.nio.file.*;
 
 public class Main {
-    public static void extractResourceFile(String res, String path) {
-        File outputFile = new File(path);
+    public static void extractResourceFile(String resourcePath, String outputPath) {
+        File outputFile = new File(outputPath);
         Utility.mkdirHyphenPDollarAtD(outputFile);
         try (
-                InputStream is = Main.class.getResourceAsStream(res);
+                InputStream is = Main.class.getResourceAsStream(resourcePath);
                 FileOutputStream fos = new FileOutputStream(outputFile);
         ) {
-            if (is == null) {
-                return;
-            }
+            if (is == null) { return; }
             byte[] buf = new byte[1024];
             int hasRead = 0;
             while ((hasRead = is.read(buf)) > 0) {
@@ -48,7 +46,7 @@ public class Main {
             }
             final File dstDirFile = new File(dstDirPath);
             if (dstDirFile.exists() && !dstDirFile.isDirectory()) {
-                System.out.println("Invalid output directory: "+dstDirFile.getCanonicalPath());
+                System.out.println("Invalid output directory: "+dstDirPath);
                 return;
             }
             if (!dstDirFile.exists()) {
@@ -56,8 +54,8 @@ public class Main {
             }
 
             Bundle.fillBundle(srcDirFile.getCanonicalPath(), dstDirFile.getCanonicalPath());
-            for (String res: Bundle.resources) {
-                extractResourceFile("/"+res, Bundle.resourcePath+File.separator+res);
+            for (String resourcePath: Bundle.resources) {
+                extractResourceFile("/"+resourcePath, Bundle.resourcePath+File.separator+resourcePath);
             }
             for (String src: Bundle.src2dst.keySet()) {
                 String dst = Bundle.src2dst.get(src);
