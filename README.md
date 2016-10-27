@@ -9,7 +9,7 @@
 
 下载 [`md2html.jar`](https://github.com/district10/md2html/releases)，然后把 `jar` 文件放到根目录，
 然后运行 `java -jar md2html.jar`（双击的话，就看不到 log，也不能用 Control-C 停止它），就有
-`../md2html-publish` 文件夹。打开里面的 `README.html` 看效果。
+`../IntelliJ-IDEA-Tutorial-master-publish` 文件夹。打开里面的 `README.html`（或者 `index.html`） 看效果。
 
 我把生成的网页上传到了网盘，在线查看：<http://whudoc.qiniudn.com/2016/IntelliJ-IDEA-Tutorial>。
 
@@ -58,6 +58,41 @@ $ java -jar md2html.jar -input source_dir -output publish_dir
 
 （在 Windows 和 Linux 上测试通过，均可以正确生成 `jar` 包。）
 
+## 更多参数的配置
+
+可以输入 `java -jar md2html.jar -help` 查看帮助：
+
+```
+Usage:
+    $ java -jar md2html.jar
+
+Options:
+    -i, -input <SOURCE DIRECTORY>
+           specify root of markdown files
+    -o, -output <DESTINATION DIRECTORY>
+           specify root of output files
+    -w, -watch
+           watch mode
+    -s, -silent
+           silent mode
+    -v, -verbose
+           verbose mode
+    -e, -expand
+           expand markdown files
+    -f, -fold
+           fold markdown contents
+    -g, -generateCodeFragment
+           generate code fragment
+
+More Usage Examples
+   1. current dir to ../publish:
+       $ java -jar md2html.jar -i . -o ../publish
+   2. turn on watch, expand markdown
+       $ java -jar md2html.jar -we
+```
+
+现在默认不 watch 了。
+
 ## Credits
 
 -   [Pandoc](https://github.com/jgm/pandoc)（Markdown 转化）
@@ -67,4 +102,64 @@ $ java -jar md2html.jar -input source_dir -output publish_dir
 
 ## TEST
 
-@include <-=demo/doc1.md=
+这部分功能还有些 bug。
+
+### 代码折叠功能
+
+这部分会被隐藏 -<
+
+:   doc1 是一个文档：[doc1.md](demo/doc1.md)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    喋喋不休，我要取关你！
+
+这部分可以被隐藏，但初始化为打开 +<
+
+:   doc1 是一个文档：[doc1.md](demo/doc1.md)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    code1 是一段代码：[demo/code1.h](demo/code1.h)。
+
+    喋喋不休，我要取关你！
+
+### 文件引入
+
+引入代码：
+
+```cpp
+@include <-=demo/code2.h=
+```
+
+诗句引入：
+
+@include <-|   =demo/poem.txt=
+
+Markdown 源码中如果没有“|”字符，引入后会合并行（所以这叫诗句引入）：
+
+@include <-=demo/poem.txt=
+
+多层次的引入还有一些环和 pading 的问题。

@@ -108,11 +108,13 @@ public class Bundle {
     public static Vector<String> getFiles() {
         Vector<String> files = new Vector<>();
         try {
+            // files
             for (String f: src2dst.keySet()) {
                 files.add(f);
             }
+            // dirs
             for (String f: key2dir.values()) {
-                files.add(f);
+                files.add(f+File.separator);
             }
             files.sort(new Comparator<String>() {
                 @Override

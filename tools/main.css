@@ -219,3 +219,15 @@ ul.focus {
 .markdown-body dd.drawerHide {
     display: none;
 }
+
+#indexButton {
+    width: 3em;
+    height: 3em;
+    opacity: 0.4;
+    position: fixed;
+    top: 1em;
+    right: 1em;
+}
+#indexButton:hover {
+  opacity: 1.0;
+}

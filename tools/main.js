@@ -79,5 +79,14 @@ function foldAll() {
 }
 
 function loadFragment(url) {
-    $('body.markdown-body').load( url );
+    $('body.markdown-body').load(url, function( response, status, xhr )  {
+        console.log('status: '+status);
+        console.log('xhr: '+JSON.stringify(xhr));
+    });
+}
+
+function loadIndex() {
+    // var url = metaJson.rootdir+metaJson.md2htmldir+'index.html';
+    var url = metaJson.rootdir+'index.html';
+    window.location = url;
 }
