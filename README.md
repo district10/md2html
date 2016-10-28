@@ -114,6 +114,12 @@ More Usage Examples
     -   debug
 -   GitHub Pages 兼容模式
     -   githubPagesCompatiable
+-   分词和搜索
+    -   [yanyiwu/cppjieba: "结巴"中文分词的C++版本](https://github.com/yanyiwu/cppjieba)
+    -   [huaban/jieba-analysis: 结巴分词(java版)](https://github.com/huaban/jieba-analysis)
+    -   [yanyiwu/simhash: 中文文档simhash值计算](https://github.com/yanyiwu/simhash)
+    -   参考：[jQuery-based Local Search Engine for Hexo | HaHack](http://hahack.com/codes/local-search-engine-for-hexo/)
+    -   自动 tagging 功能
 
 最后，最重要的 TODO：不要 dive into this project。Try WebSock intead！学 Java，要全面不能囿于一室。
 

@@ -40,7 +40,7 @@ public class Utility {
                         resolveToRoot(outputPath, Bundle.dstDir), Bundle.resourceDirName, pathBasedOnRoot.replace('\\', '/'),
                         Bundle.htmltemplatePath, Bundle.dotmd2htmlymlPath,
                         outputPath, outputPathHTML);
-
+        // TODO: update mapping: thispath -> title
         try {
             if (!Config.silentMode) {
                 System.out.printf("[P] %s -> %s\n", outputPath, outputPathHTML);
@@ -83,6 +83,7 @@ public class Utility {
                         }
                         dump(lines, outputFile, isMarkdownFile);
                     }
+                    // TODO: update entry in search.xml
                     // dst/dir/file.md -> dst/dir/file.html
                     md2html(outputPath);
                 } else {
