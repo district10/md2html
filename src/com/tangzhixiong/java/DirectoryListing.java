@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.*;
 
 public class DirectoryListing {
-    public static void main(String[] args) throws Exception {
-        System.out.println();
+    public static void main(String[] args)  {
     }
 }

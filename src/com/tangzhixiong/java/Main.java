@@ -34,7 +34,9 @@ public class Main {
                 System.exit(1);
             }
             // config destination dir
-            if (Config.dstDirPath == null) { Config.dstDirPath = String.format("../%s-publish", Utility.getDirName(".")); }
+            if (Config.dstDirPath == null) {
+                Config.dstDirPath = String.format("../%s-publish", Utility.getDirName(Config.srcDirPath));
+            }
             final File dstDirFile = new File(Config.dstDirPath);
             if (dstDirFile.exists() && !dstDirFile.isDirectory()) {
                 System.err.println("Invalid output directory: "+Config.dstDirPath);

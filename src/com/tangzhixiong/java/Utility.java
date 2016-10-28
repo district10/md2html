@@ -81,7 +81,7 @@ public class Utility {
                         if (writeLog) {
                             System.out.printf("[E] %s -> %s\n", inputPath, outputPath);
                         }
-                        dump(lines, outputFile, true);
+                        dump(lines, outputFile, isMarkdownFile);
                     }
                     // dst/dir/file.md -> dst/dir/file.html
                     md2html(outputPath);
@@ -161,7 +161,7 @@ public class Utility {
                 int hasRead = 0;
                 ps.printf("~~~~~~~~~~~~~~~~~~~~~ {.%s .numberLines}\n", label);
                 while ((hasRead = fis.read(buf)) > 0) { ps.write(buf, 0, hasRead) ; }
-                ps.print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+                ps.print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
                 ps.close();
                 // pipe out
                 BufferedReader reader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
