@@ -15,6 +15,8 @@ pack := \
 	$(dist)/com/tangzhixiong/java/DirectoryListing.class \
 	$(dist)/com/tangzhixiong/java/Main.class \
 	$(dist)/com/tangzhixiong/java/Utility.class \
+	$(dist)/.md2html.yml \
+	$(dist)/README.txt \
 	$(dist)/cat.pl \
 	$(dist)/drawer.pl \
 	$(dist)/html.template \
@@ -22,7 +24,6 @@ pack := \
 	$(dist)/lazyload.min.js \
 	$(dist)/main.css \
 	$(dist)/main.js \
-	$(dist)/README.txt \
 
 %.class:
 	mkdir -p $(dist)

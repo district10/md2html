@@ -2,6 +2,8 @@
 
 把文件夹下的 Markdown 文件，转化成 GitHub 风格的 HTML。
 
+（代码高亮我用了自己喜欢的 Pygments 风格 ==）
+
 ### 应用举例
 
 比如 @judasn 的 [judasn/IntelliJ-IDEA-Tutorial: IntelliJ IDEA 简体中文专题教程](https://github.com/judasn/IntelliJ-IDEA-Tutorial)。
@@ -93,6 +95,28 @@ More Usage Examples
 
 现在默认不 watch 了。
 
+## TODO
+
+更多的 options：
+
+-   文件映射
+    -   noDefaultFileMappings
+    -   extraFileMappings
+-   URL 映射
+    -   noDefaultUrlMappings
+    -   extraUrlMappings
+-   CSS，JS
+    -   noDefaultCSS
+    -   noDefaultJS
+    -   extraCSSs
+    -   extraJSs
+-   Debug 模式
+    -   debug
+-   GitHub Pages 兼容模式
+    -   githubPagesCompatiable
+
+最后，最重要的 TODO：不要 dive into this project。Try WebSock intead！学 Java，要全面不能囿于一室。
+
 ## Credits
 
 -   [Pandoc](https://github.com/jgm/pandoc)（Markdown 转化）
@@ -102,7 +126,9 @@ More Usage Examples
 
 ## TEST
 
-这部分功能还有些 bug。
+这是增强的 Markdown，在 GitHub 上不能正确渲染。请本地查看。
+
+（这部分功能还有些 bug。）
 
 ### 代码折叠功能
 
