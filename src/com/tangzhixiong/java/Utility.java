@@ -46,9 +46,18 @@ public class Utility {
                 System.out.printf("[P] %s -> %s\n", outputPath, outputPathHTML);
             }
             runtime.exec(cmd);
+            // Process proc = runtime.exec(cmd);
+            // System.out.println("[L]: Error at: "+proc.getErrorStream().toString());
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+
+        // copy README.html -> index.html
+        if (Config.readmeAsMainIndex && outputPathHTML.equals(Config.dstDirPath+File.separator+"README.html")) {
+            String readmeHTML = outputPathHTML;
+            String indexHTML = readmeHTML.substring(0, readmeHTML.lastIndexOf("README.html")) + "index.html";
+            mappingFile(readmeHTML, indexHTML);
         }
     }
 
@@ -61,6 +70,10 @@ public class Utility {
     public static void mappingFile(String inputPath, String outputPath, boolean writeLog) {
         File inputFile = new File(inputPath);
         File outputFile = new File(outputPath);
+        if (!inputFile.exists()) {
+            System.out.println("[L] '"+inputFile.getAbsolutePath()+"' does not exists.");
+            return;
+        }
         if (!outputFile.exists() || inputFile.lastModified() > outputFile.lastModified()) {
             mkdirHyphenPDollarAtD(outputFile);
             try {
@@ -269,12 +282,31 @@ public class Utility {
 
     public static List<String> getLinesNaive(String inputPath) {
         try {
-            return Files.readAllLines(new File(inputPath).toPath(), Charset.defaultCharset() );
+            return Files.readAllLines(new File(inputPath).toPath(), Charset.defaultCharset() ); // UTF-8
         }
         catch (IOException e) {
-            e.printStackTrace();
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(new File(inputPath)));
+                String line;
+                ArrayList<String> lines = new ArrayList<>();
+                while((line = reader.readLine()) != null) {
+                    lines.add(line);
+                }
+                reader.close();
+                return lines;
+            }
+            catch (IOException ioe) {
+            }
         }
-        return null;
+        return new ArrayList<String>();
+    }
+
+    public static List<String> expandLines(String inputPath) {
+        if (Config.expandMarkdown) {
+            return expandLines(inputPath, new InclusionParams());
+        } else {
+            return getLinesNaive(inputPath);
+        }
     }
 
     // inputPath is a CanonicalPath, params is for INPUT
@@ -342,20 +374,12 @@ public class Utility {
         finally {
             params.parents.remove(inputPath);
         }
-
-        /*
-        if (Bundle.src2dst.keySet().contains(inputPath)) {
-            String outputPath = Bundle.src2dst.get(inputPath);
-            File outputFile = new File(outputPath);
-            if (!outputFile.exists() || inputFile.lastModified() > outputFile.lastModified()) {
-                dump(lines, outputFile, true);
-                md2html(outputPath);
-            }
-        } else {
-            System.out.println("Not fould.???");
-        }
-        */
         return lines;
+    }
+
+    public static void dump(List<String> lines, File outputFile) {
+        // typically not a markdown file
+        dump(lines, outputFile, false);
     }
 
     public static void dump(List<String> lines, File outputFile, boolean isMarkdownFile) {
@@ -378,7 +402,7 @@ public class Utility {
                     fos.write("\n".getBytes());
                 }
             } else {
-                // twist a little bit for each line
+                // if not markdown file, or not fold markdown, just write out
                 for (String line: lines) {
                     fos.write(line.getBytes());
                     fos.write("\n".getBytes());

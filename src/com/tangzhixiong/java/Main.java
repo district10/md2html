@@ -4,6 +4,8 @@ import com.sun.javafx.webkit.UtilitiesImpl;
 
 import javax.sound.midi.SysexMessage;
 import java.io.*;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +17,25 @@ class Config {
     public static boolean foldMarkdown = false;
     public static boolean expandMarkdown = false;
     public static boolean generateCodeFragment = false;
+    public static boolean readmeAsMainIndex = false;
 
     public static String srcDirPath = null;
     public static String dstDirPath = null;
 }
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        try {
+            // hacks copied from StackOverflow: http://stackoverflow.com/questions/361975/setting-the-default-java-character-encoding
+           System.setProperty("file.encoding", "UTF-8");
+            Field charset = Charset.class.getDeclaredField("defaultCharset");
+            charset.setAccessible(true);
+            charset.set(null, null);
+        }
+        catch (Exception e) {
+            System.err.println("Tip: You need to explicit specify JVM encoding to UTF-8, like: "+
+                    "'java -jar md2html -Dfile.encoding=utf-8'.");
+        }
         try {
             // load commandline configs
             parseConfigs(args);
@@ -33,6 +47,8 @@ public class Main {
                 System.err.println("Invalid input directory: "+Config.srcDirPath);
                 System.exit(1);
             }
+            // TODO: if git repo, grab upstream info
+
             // config destination dir
             if (Config.dstDirPath == null) {
                 Config.dstDirPath = String.format("../%s-publish", Utility.getDirName(Config.srcDirPath));
@@ -46,20 +62,23 @@ public class Main {
                 dstDirFile.mkdirs();
             }
 
+            // normalize srcDirPath/dstDirPath
             Config.srcDirPath = srcDirFile.getCanonicalPath();
             Config.dstDirPath = dstDirFile.getCanonicalPath();
 
             // build file mapping strategy
             Bundle.fillBundle(Config.srcDirPath, Config.dstDirPath);
 
-            // copy configs
+            // copy configs, if there is a '.md2html.yml' in srcDirPath
             Utility.mappingFile(
                     Bundle.srcDir+File.separator+Bundle.md2htmlymlRes,
                     Bundle.dstDir+File.separator+Bundle.md2htmlymlRes);
+
             // extract necessary static resources
             for (String resourcePath: Bundle.resources) {
                 Utility.extractResourceFile("/"+resourcePath, Bundle.resourcePath+File.separator+resourcePath);
             }
+
             // merge configs
             ArrayList<String> partAll = new ArrayList<>();
             {
@@ -80,33 +99,40 @@ public class Main {
                 partAll.add(0, "---");
                 partAll.add("---");
             }
-            // write config
-            Utility.dump(partAll, new File(Bundle.dotmd2htmlymlPath), false);
+            // write merged configs out
+            Utility.dump(partAll, new File(Bundle.dotmd2htmlymlPath));
 
-            String indexMdSrc = Bundle.srcDir+File.separator+"index.md";
-            List<String> indexPage = Utility.expandLines(indexMdSrc, new InclusionParams());
+            // index.html <--- index.md / README.md
+            String indexMdSrc = Config.srcDirPath+File.separator+"index.md";
+            List<String> indexPage = Utility.expandLines(indexMdSrc);
             if (indexPage.isEmpty()) {
-                indexMdSrc = Bundle.srcDir+File.separator+"README.md";
-                indexPage.addAll(Utility.expandLines(indexMdSrc, new InclusionParams()));
+                Config.readmeAsMainIndex = true;
+                indexMdSrc = Config.srcDirPath+File.separator+"README.md";
+                indexPage.addAll(Utility.expandLines(indexMdSrc));
             }
-            if (indexPage.isEmpty()) {
-                System.err.println("You must have either 'index.md'or 'README.md' in the source root dir");
-                System.exit(1);
+            if (!indexPage.isEmpty()) {
+                String indexMdDst = Config.dstDirPath+File.separator+"index.md";
+                boolean isMarkdownFile = true;
+                Utility.dump(indexPage, new File(indexMdDst), isMarkdownFile);
+                Utility.md2html(indexMdDst);
+            } else {
+                System.err.println("You better have either 'index.md' or 'README.md' in the source root dir");
             }
-            String indexMdDst = Bundle.dstDir+File.separator+"index.md";
-            Utility.dump(indexPage, new File(indexMdDst), true);
-            Utility.md2html(indexMdDst);
 
+            // [srcDir]->[dstDir]: copy or convert, if update needed
             for (String inputPath: Bundle.src2dst.keySet()) {
                 String outputPath = Bundle.src2dst.get(inputPath);
-                Utility.mappingFile(inputPath, outputPath);         // copy or convert, if needed
+                Utility.mappingFile(inputPath, outputPath);
             }
 
+            // if not watchMode, done
             if (!Config.watchMode) {
-                System.out.println("\nYou can turn on [watch mode] with '-w' option.");
+                System.out.println("\nTip: You can turn on [watch mode] with '-w' option.");
                 System.exit(0);
             }
 
+            // else, watch folder for changes, update when edits happen
+            System.out.println("Watching...");
             long prevTimeStamp = System.currentTimeMillis(), curTimeStamp;
             String lastInputPath = "";
             while (true) {
@@ -120,6 +146,7 @@ public class Main {
                     e.printStackTrace();
                     continue;
                 }
+                System.out.println("Watching...");
                 for (WatchEvent<?> event : key.pollEvents()) {
                     // if (event.kind() != StandardWatchEventKinds.ENTRY_MODIFY) { continue; }
                     @SuppressWarnings (value="unchecked")
@@ -215,13 +242,13 @@ public class Main {
                         default:
                             System.err.println("Invalid Config: "+args[i] +", and char: "+String.valueOf(args[i].charAt(k)));
                             printHelp();
-                            System.exit(1);
+                            System.exit(3);
                     }
                 }
             } else {
                 System.err.println("Invalid Config.");
                 printHelp();
-                System.exit(1);
+                System.exit(3);
             }
         }
 
