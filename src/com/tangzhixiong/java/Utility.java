@@ -36,7 +36,7 @@ public class Utility {
         String pathBasedOnRoot = outputPath.substring(Bundle.dstDir.length()+1);
         String cmd = String.format( "pandoc -S -s --ascii --mathjax " +
                         "-f markdown+abbreviations+east_asian_line_breaks+emoji " +
-                        "-V rootdir=%s -V md2htmldir=%s/ -V thispath=%s --template %s %s %s -o %s",
+                        "-V rootdir=%s -V md2htmldir=%s/ -V thispath=%s --template %s %s '%s' -o '%s'",
                         resolveToRoot(outputPath, Bundle.dstDir), Bundle.resourceDirName, pathBasedOnRoot.replace('\\', '/'),
                         Bundle.htmltemplatePath, Bundle.dotmd2htmlymlPath,
                         outputPath, outputPathHTML);

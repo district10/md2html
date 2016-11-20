@@ -1,0 +1,221 @@
+#+SETUPFILE: setup.org
+#+TITLE: Everything of TANG ZhiXiong
+#+LINK: bing http://cn.bing.com/search?q=%s
+#+PROPERTY: NDisks_ALL 1 2 3 4
+#+PROPERTY: Effort_ALL 0 0:10 0:30 1:00 2:00 3:00 4:00 5:00 6:00 7:00
+#+COLUMNS: %25ITEM %TODO %3PRIORITY %TAGS
+
+* Everything of TANG ZhiXiong
+** tmux etc
+   + =C-[b {"/%}]= split window, 类似 Emacs 的 =C-[x {2/3}]=
+** Practicing Org-mode here
+*** TODO Emacs basics
+**** Simple tricks
+     + =C-[x c]= (close), =C-[x f]= (open file), =C-[x s]= (save file)
+     + =C-w= 是剪切, =M-w= 是复制
+     + =C-h {a, c/k, f, v, i, m}= 帮助!!! Emacs 必知必会.
+     + =M-x cmd= (exec command)
+     + =ESC ?, M-?= 两者等价, 前者好按, 后者便于连续使用
+     + ={C,M}-{f/b}= (char, word), ={C,M}-{a/e}= (line, sentence), ={C,M}-{n/p}= (line, ?), M 比 C 层次更粗/高
+     + ={C,M}-{d,k}= (delete next char, word), (delete line, sentence)
+     + =C-u= (4), =C-u <num>= 数字前缀(作为参数)
+     + =C-g= (取消, 建议把 =C-M-g= 也设置为取消, 不然老按错)
+     + =C-l= (上中下)
+     + =DEL=, =Backspace=
+     + =C-SPC= ([de]mark), =C-w= (剪切), ={C,M}-y= (粘贴, 奇怪的是在 Vim 里, yank 是复制...)
+     + =C-/= (undo), Emacs 没有 redo, 但是这个 undo 功能完虐 redo
+     + =C-[x b]=, =C-x b= (切换 buffer)
+     + =C-x {1,0,2,3}= (窗口操作), =C-M-v= (另一个窗口滚屏), 如何关闭帮助窗口?: =C-x 1=
+     + =C-x 4 C-f= (在另一个窗口 find-file)
+     + =C-[x s]= =(save-buffer)=, =C-x s= =(save-some-buffers)=
+     + =C-[x q]=: toggle buffer! readonly (只读模式太好用!). =C-k=: kill buffer
+     + 记住, 有些地方只读模式可以用 =q= 退出 buffer, 挺方便. (这是 help-mode 的功能)
+     + =M-x revert-buffer=, like =:e!= in Vim
+     + =M-x recover-file= (Crash 后用, 如果你那么不幸的话...)
+     + Echo Area, Mode Line, Mini Buffer
+     + =[C-s KEYWORDS {RET(正好命中), C-g(取消), Left(差点命中), Right(差点命中), DEL (错了, 重新输入)}]=
+       搜索什么的, =C-r= 是反向搜索. =M-s= 是 regexp 搜索.
+     + =C-S-Backspace= =(kill-whole-line)=
+     + =C-SPC=: set marks (用两次, 不然就成了 Shift 选中功能), 返回
+       mark: 用 =C-{u,x} C-SPC=, 还有 =C-x SPC= =(rectangle-mark-mode)=
+**** Learning GNU Emacs
+     Book reading.
+***** notices
+      + Meta or ESC
+      + *Major modes*: text mode, view mode, shell mode, picture mode, html
+        mode, cc mode, java mode, sql mode, lisp mode, emacs lisp mode
+      + *Minor modes*: artist mode, abbrev mode, flyspell mode, isearch
+        mode, auto-save mode, ISO accents mode, font lock mode, VC
+        mode, info mode
+      + =X-s= (ESC), =X-b= (Backspace)
+      + +一个比较蛋疼的地方是：Emacs 里认为 Delete 是 delete-forword-char，而 Backspace 是 DEL。+
+***** chapter (@1)
+****** the mode line
+****** the mini buffer
+****** Emacs commands
+       + Getting help =C-h {f,a,c/k,t,f,v,i,m}=, 帮助!!
+       + ={C,M}-{n,p}=
+       + =C-[x f]= =(find-file)=, =C-[x v]= (find-alternate-file, 如果你
+         刚才 find 错了 file 的话, 就用这个重新打开一个文件)
+       + =C-x i= =(insert-file)= to current position, 插入一个文件
+       + =C-[x s]= =(save-buffer)=: save, 保存
+       + =C-[x w]= =(write-file)=: save as, 另存
+       + =C-[x c]= =(save-buffers-kill-emacs)=, =y= → save&exit, =n= → nothing, 关闭
+       + =F10= =(menu-bar-open)=
+       + =M-x clipboard-yank= (paste), =(clipboard-kill-ring-save)= (copy),
+         =(clipboard-kill-region)= (cut)
+       + =M-x revert-buffer=
+***** chapter (*3)
+***** chapter (@5) Emacs as a Work Environment
+      - run cmd: =M-!=, or =ESC= !
+      - =M-h=: mark paragraph, 超级好用!!!
+      - =M-h M-| tr -d ' ' RET=: sort & output to mini buffer
+      - =C-u ESC ! date +%s RET=: 1454333299, 就像 Vim 里的 =:r!date +%s=
+      - 综上,
+        1) =M-!= (exclamation 对比 execute)是 shell 脚本,
+        2) =M-&= (ampersand 对比 async) 是异步的,
+        3) =M-|= (bar 对比 buffer) 会把选中的 region 重定向作为输入.
+      - shell mode, Emacs 里有三种 Shell.
+        1) =(setq shell-file-name "/bin/zsh")=
+        2) for password input: =(send-invisible)=
+      - dired mode
+        =M-x dired= or =C-x d= (重要!!!)
+        + ={,C}-{n/p}=, =SPC=
+        + =v= =(dired-view-file)=, 只读模式打开查看
+          * =q= =(View-quit)= 关闭查看
+          * ~=~ =(what-line)= 显示自己现在的行号
+        + =d= =(dired-flag-file-deletion)=, =x= =(dired-do-flagged-delete)=,
+          =m=, =D=, 注意 =dx= 和 =mD= 这两种搭配.
+        + =R= (rename)
+        + =C= (copy), 3C copy three files
+        + =i= 和 =RET= 不一样。=i= 是在当前 dired buffer 里打开子目录,
+          而 =ENTER= 是新建一个 新建一个 buffer 打开
+        + =Z=: compressing & uncompressing (in place),
+          =(auto-compression-mode)= (这个命令太粗暴)
+        + =!=: execute command, e.g. =!sort=, =!sort * > output=, =*= 是当前选中的文件的文件名
+        + =#=: flag emacs autosaved file, 类似 =#filename#=, 方便地处理 Emacs 自己的"垃圾",
+          同理还有 =~= 文件
+        + =dpu=: delete, up, undo (撤销删除标记)
+        + 几中标记
+          * =**=: mark executable, 这几个 mark 很有意思
+          * =*/=: mark dir
+          * =*@=: mark symbolic
+          * =%m=: mark reg match files (filename), 按照文件名 reg 择取
+          * =%g=: mark reg match files (file content), 按照内容 reg 择取, 这个太刁
+        + =+=: create dir, 新建目录, 好像没有 create file 的命令, 可以考虑用 =!touch file=
+        + =R=: multiple files? then mv (to a dir)
+      - =M-x print-buffer=: send to printer (好像没什么用...)
+      - =M-x man=: man page
+      - =M-x calendar=: 日历模式, 也很刁
+        + =C-x []=, year, 去年/明年
+        + =C-x {}=, month, 上月/下月
+        + =gd=: goto date, 指定日期
+        + 写 diary
+          * =id=: insert daily diary, 四个 insert, day/week/month/year
+          * =iw=: insert weekly diary
+          * =im=: insert monthly diary
+          * =iy=: insert year diary
+        + and a lot more hacks
+***** chapter (*7) Simple Text Formatting and Specialized Editing
+      - =C-[x e]= =(eval-last-sexp)= is an interactive compiled Lisp function
+      - =(edit-tab-stops)=, =C-q TAB= → a literal tab, 这叫 Verbatim 插入.
+      - =(setq-default tab-width 4)=
+      - =(setq-default indent-tabs-mode nil)=
+      - =(M-x mark-whole-buffer)= =C-x h=, 选中全部, 记得选中本段吗? =M-h=
+      - =M-x untabify=, =M-x tabify=, 类似 Vim 里的 =:set [no]expandtab= 再 =:retab=
+      - text-mode
+      - =S-{left/right}=: 在 =+=, =-=, =*=, =1)=, etc, 方便地切换 bullet 样式
+      - =M-m=: =(back-to-indentation)=, 其实不一定是 back, 类似 Vim 的 =^=
+      - =ESC C-o=: =(split-line)= (C-o 是 open-line, 还有一个
+        picture-open-line, 但是不总可用)
+      - ={increase/decrease}-{left/right}-margin=, =defvar=
+      - =(standard-indent)=
+      - =(auto-fill-mode)=
+      - =C-x .=: =(set-fill-prefix)=, 可以把本行光标前的字符设置为 prefix,
+        再用 =M-q= =(fill-paragraph)=
+      - =center-region=, =center-paragraph=, =center-line=,
+        =set-justification-center=
+      - outline-mode, 其中 =C-[cp]= 和 =C-[cf]= 用得最多.
+        + =C-[c {f/b}]=
+        + =C-[c {n/p}]=
+      - Rectangle commands
+      - Picture mode
+        + left, right, up, down: =C-c {<,>,^,.}=
+        + upright, upleft, downleft, down right: =C-c {',`,/,\}=
+        + =C-[c {f,b}]=: move cursor
+        + =C-o=: blank line (注意 =(picture-open-line)= 和 =(open-line)= 的区别)
+        + 发现一个有趣的现象，ESC RET 如果在行末，那就是在下面添加
+          entry，否则是上面。
+      - Artist mode
+        + =C-[c a o]: =(artist-select-operation)=
+          * spray-can, 有快捷键 =C-[ca] S=
+          * eclipse, =C-[c a] e=
+          * line
+          * circle
+        + =C-c C-a C-f=: artist-select-fill-char, 设置一个 fill 的字符
+        + =C-c C-a C-k=: 剪切
+        + =C-c C-a M-w=: 复制
+        + =C-c C-a C-y=: 粘贴(每点击一次,就粘贴)
+        + =C-c C-a   v=: vaporize-line, 就是删除线条
+        + =C-c C-a C-d=: delete char, 和鼠标右键一样
+***** chapter (*8) Markup language support
+***** chapter (@9) Computer language support
+      - =indent-region=
+      - =c-set-style=
+      - =c-toggle-auto-state=
+      - =c-toggle-auto-hungry-state=
+      - =c++-mode-hook=
+      - java support =(jde-global-classpath)=
+      - =cperl-mode=, =perl-mode=
+***** chapter (@12) Version Control
+      这一部分十分重要, 原来 git 的最佳使用是在 Emacs 里, 而不是命令行自己输入.
+
+      - =C-x v v=: commit & save, =(vc-next-action)=, 提交修改
+      - =C-x C-c=: commit commit message
+      - =C-x v u=: undo, revert from staged, =(vc-revert-buffer)=
+      - ~C-x v =~: =(vc-diff)= 牛逼到爆!! 后面还讲了 ediff, 更牛逼的样子
+      - =C-x v d=: (vc-directory), 有点 git status 的感觉
+      - =C-x v l=: print log, 跟 git log 类似, 不知道是否可以切换 ~pretty=oneline~
+      - 所有的 VC 相关函数都绑定在 =C-x v= 前缀, 你会很快熟悉. 只要记住
+        一个字母就够了.
+      - =C-x v i=: =(vc-register), 把当前文件加到版本控制中, insert?
+      - 一个使用流程, 把代码下载, register (就是用 VC 管理), 然后修改,
+        然后 ~C-u C-x v =~ 产生一个 patch, 方便打补丁.
+      - =C-x v ~=: =(vc-revision-other-window)=, 就是把以前的版本 retrieve 出来
+      - =(vc-rename-file)=
+      - =C-x v a=: =(vc-update-change-log)=, Git 不可用.
+      - =(vc-clear-context)=: 重启 VC
+      - =(ediff-revision)=
+*** Org-mode Concepts
+    - =TAB=, to cycle, =S-TAB=
+    - =M-= or =M-S-= & cursor: move up/down, promote, demote, 就是 Meta 加方向键.
+    - =M-RET=: another bullet =(org-insert-heading)=
+    - =C-[c t]=, (org-todo). =(transpose-lines)= 是 =C-[x t]=
+    - properties, hyperlinks
+*** Help Mode 笔记
+    Help-mode 很重要, 因为你总是要用到它. 其中有用的快捷键有
+
+    - =SPC/DEL=: 滚动屏幕
+    - =C-c C-{f/b}=, 类似浏览器的 forward/backward, *=r/l=* 也类似
+    - =C-[c c] 跳转到链接
+    - *=q=* 退出
+    - =<= 和 =>= 分别可以到 bufffer 头和尾, 所有的 buffer 都可以用 =M-{<,>}= 跳转到头和尾.
+    - =RET= 跳转, *=TAB= 切换焦点*
+    - *=?=* 弹出帮助
+    - =M-x ielm= 是一个 Elisp 的 REPL
+    - =M-:=: runs the command =(eval-expression)=
+    - =C-u M-:= eval 完了还把命令结果插入, 这个 =C-u= 很有用. e.g. =C-u C-h c C-n RET= 把 C-n 这个快捷键的功能说明插入到文本!!!
+    - 函数必须用 () 括起来求值, 而变量不需要. 所以 Elisp: =system-type= 要直接用.
+    - *=(eldoc-mode)=* 太有用, 最好打开, 可以显示 elisp 的函数列表啥意思.
+    - =(tooltip-mode)=
+    - 一些变量和函数: =fset=, =setq=, =defvar=, =defun=, =setdefault=, =add-to-list=, =add-hook=
+    - ='("-b" "-u")= 和 =(list "-b" "-u")= 是一样的
+    - =(add-to-list 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)= 和
+      =(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)= 一样. =add-hook= 和 =remove-hook= 相反
+    - =(setq 'some-list (delete "item" 'some-list))= 只能这样删除 list 中的元素
+    - =(x . y)= 是一个 *cons cells*, 其中 x 是其 =car=, y 是其 =cdr=.
+      明确只有两个元素, 一般的列表的 =cdr= 是另一个列表, 而不是一个元素. 注意区分其不同.
+    - =(setq alist (cons "item" alist))= 和 =(add-to-list 'alist "item")= 不同,
+      前者可能插入重复内容.
+    - 类似 ='= 还有一个 =`=, 作用类似 Bash 的变量替换. =(setq 'alist `("item" ,alist))=
+    - 还可以把一个快捷键绑定到另一个快捷键, 比如 =(global-set-key (kbd "C-z") (kbd "C-p"))=

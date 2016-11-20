@@ -1,0 +1,598 @@
+#+SETUPFILE: setup.org
+#+TITLE: All Configs in One File
+
+这里有我所有的配置。甚至包括自己各种（社交）网站帐号的密码。当然，GPG 加密过。
+
+Emacs can tangle out codes from this file! How cool.
+And the only drawback is that you can't diff your mods
+via =git diff=, though it's still version controlled.
+
+* notes
+#+BEGIN_COMMENT
+1. tags, secret
+2. left, right aligned image
+3. tab pages
+#+END_COMMENT
+
+* accounts info
+** intro
+
+Of course you can't see it.
+
+- Get passwords: [[http://passwordsgenerator.net/][Secure Password Generator]]
+- my GPG pubkey: [[http://keys.gnupg.net:11371/pks/lookup?op=vindex&search=TANG+ZhiXiong&fingerprint=on][Search results for 'zhixiong tang']]
+- =(org-sort-entries)=, then =a[lpha]=
+
+** this part is only for me                                          :secret:
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+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
+AaD2IP0R+aIPV6G6aMsaNsdqyPouo2H0rA==
+=tqd+
+-----END PGP MESSAGE-----
+
+* qiniu
+
+** qrsync configs
+
+- command line syncing tool, like =rsync= but works with qiniu remote
+  bucket
+- several qrsync json configuration files, tangled to =~/conf/=
+- usage, for example: =qrsync ~/conf/sob.json=
+
+*** sob                                                              :secret:
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+hQEMA/UK1fWnkkUVAQf+K6RP0Xr3lyEZEZn4qGShKwUCskqQx7kpOzLkwhFT93HU
+pIDbvQy09wCAht5ZDXICJOwZMor/NckLeJKMlmgXEDd7DbExj2QOPyFOxodahSzK
+98lSzP+6TD9B1oamdFMBvG0eeZNpWMU1YF4SRVWUp2MXFMSJKtZ9OUfu89uNKB5W
++ccEyYLVT5zO6wNI5lgCkZl40PFluM4wYkhS7ocrjla7zyjGXb1FghARRhXxZ66y
+jjOCCbfA14Kxl6G4pdTEd8ayO4TODJJ8Byk/vCl8ZLhK9/MVQTbtSMhknNtfkYuu
+t0PBME4TRhN+OY7mkwXVMh/LvU7Ww2gzK2d/bA9iKNLAcgEUK1wPhE45yhCY61vu
+8og1imxZwqwtehLHJUs7yvoOGXOYXKqGCpokQIEJxrrHPZklW63xmrmPvy0L3eN/
+7NybnJMLCe8/eedH3pJIHVbIRiyohScH3smPLd57AVYplo/kFOd3/qaPiazdEYqA
+ezr48XOAZiUU6z79TkkGb18x7bK9BxeAxcaEqXCbaXLi06KadVH2bXd9xifcSaZi
+kHEHWCbZ7gVL7UTuqLcf1HkZbthEs7+2m16CezbGsBRuGCMouMLuJSiLdwn8gSip
+mLVG3zn+O6lHzi/ybk6N99o7rV+S7tAPeVkaaWLiTCnBsCsqTVH4LhhN2J0jCvT5
+wqOhJx0ai+E648DVbCjaYDc8fv/7a6wfQUcs8Lee4FOCkkqp9QFcLcIx8BWGMA0p
+JhcPyw==
+=CFP7
+-----END PGP MESSAGE-----
+
+*** orgit                                                            :secret:
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+<<<<<<< HEAD
+hQEMA/UK1fWnkkUVAQf/S1CAo5ZYRlZvtP3bdzHbFzwEfs942IhroMVy97bGhXZC
+CXRbKlR8UxqWWyJmYO3V2PNEf50kcrS23uh8D5zaVO1CWSmq8Y8aHLqi5OKH/5nS
+71amr3VX+Ty1FrE7MGdzuQyhYOhNtZAbEaaMQEbPWSd1wyb3NjAiml0Asw75kR55
+PBoPrdLLUneFtVj6Z2bZhXVJWwdbgLsH+7lZghsPU8uIi+ar21sSzna+NRyHdQ5g
+itx0Nf6T4kvcOog9AttcArQm/LvLnV4UQn4hxIt6h77IU+poFdGRaIkCFm/WLfpd
+I4WtNCtozhGOuPYyCrEsqRmQAQf8H1TdKwN5Is4GxdLAeAFBXr9tpEiQSs2DfNRY
+0UUYPCaHQyD4Pn7G6PXCHj70MrLwmk8ZqATeaP58IVcaOewSUti8gzwnYJ8EITf9
+HQZABSIVr3weEUr1+PRkRTZXnQJbTpaM6AtrPWlmaD8aVABm1WtPBrIrsiLHavDD
+wQX12P3xx7CsecMqujAjmFrotPHAIo7BWVQF1+Ysv6Bf+9PdX7DaAamC0gFMjZWI
+nTEnsSJXO90HsGLSqWP1g/8ScB7PD6XXO3OTvspVQiBALNVFzpZl11/Dnso+WOtx
+gv9HCzvB08E2iO5lcqZ/QhnQh7OZWgBVw1PlsItYXooe69hcwngd3+AuQMie8/xq
+sm407g0z5xab/9OezslU/tWjLduCSrSRYu9N7cCFvrcsJBR0m6qKl9HQyQObPpqg
+sXODbrkDtu/XBw==
+=HZ2m
+=======
+hQEMA/UK1fWnkkUVAQf/WgkirZfuEKOHKspbQhU4YYO6ARCqXuVcs8Ofd+ZeA7l9
+ZcJr5guV3QBdANOykrRnVdyWu6SL4q6ef+IsEaalfD3jZLTwMWKGlT8lCZWTjQug
+BMc2vvFZWxMW9LOVjC1ClCA9WZ++/eGpvrzQkVlxGqLqj0nODL/3Wg2ZqtJluhox
+GHPJ4YF2S7laepwGyjDYNxIDDuymF1X5aSK8IS6pJUB4oTclv2NSY34TKzGlsodM
+B6pnSovRa+ebeepKVgN3J3ljG5hi3HUzi5JAPE25OtPdyYrdp+5jkvu7N6bFZyLf
+Gofyvek+Wofyg0bL/G1ovRlb/Ygo+jks9soMpiMeONLAaQGfNhRegt8lwFhEcuz7
+SyzgFEVhG9TrKBG4gkMcp8VhFUVexU5KjaVg0dAP7OxZuwyRg4O4EHxjTi+iFp8p
+qfJttWVqOy/BKvh3to1LgFn4lB/q/X30BJkbnTDcu99nCkDNnS5QoK2AkI8FRuX0
+MRWRa0dLam0zMN1AJrLsr73YIRxomc7UNM47nQQ44lAChN+Nc9edJwxo0y3p4Syq
+bP5mBLQI8zcdRQqii/r5S7erg2uRczDgCqFIwS5RZqap0IZIwWSvPZEHCq+ZWeos
+oapllTVt+UR7kqzqGo9Xo7tXKyL0BTnhB99UWjuzomnkh4C3XCqJr4m+Jm4Ni6Vp
+L/ftp8HNdOSZja21AB+U/mj76++KrEE3lr/KCwsj0zMBMECyqihkeD0gUw==
+=UvGz
+>>>>>>> dd8dc1898455516b255ce05fccf4a909fbb72b23
+-----END PGP MESSAGE-----
+
+*** blog                                                             :secret:
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+hQEMA/UK1fWnkkUVAQf9FZDydyIv6xKNXGoc9Y5uPxR3KjTQhgOtIDSYU2FjFJuq
+oqpm0XYFsUUEOwETKq8+d2aiOQ0E3yi44RQF6V34g2Y3WDgf8ivDG47hm3w7UCpr
+UjMd8uv/gIFXkoK6X/G3zIU5BTZUwZL5KAu7aVjPgImREHU+NO9nXp9/QXZvffSN
+oFIr7Bg45rzzKgMQv7dG9rDNG8Cq/lxLEbvF4vV0MWd2m/2XA7P7AZP/3/E0KeN5
+SwcnQhDXHXPyznGIJ/PtxhaZZ5CnIFlMDqwZd9mlu5JeBkvJtjcEWhSRNBAuYByU
+WFanAUoxXdn47Pe01L0t+sQ445+4PdoG5iTijIpIC9LAaQF6u1FnyeeexFfLiZYQ
+D5LyqFuZioHNoeg73Z9HPW1DEYAILLC/gGi1XWuaQSaUJw1RoUu5hHIYE1NLGX0d
+S9pmkwkm9ojEJp13xgNbE6XXo7nc/m/Ar/loe8otlIflIyiV+EhlDit5Eq5jdKY0
+tulLz7fvFhNETdEO47y9zZLI02Rd2YM7M83DnFtXpKNPa3L13o0GjhVTXdJQYYgg
+fFwiIevntifdPgRBEQjN72M8VG5owNbP5JurLj+b19DpwT8eZdYjEBOhQe4ux2Ba
+byO94wtPiABn25wKjkRq+19WFF8C3/9dQz0tacs9SLAIaH52wXNXaeknFve8PDGV
+ykgq0gijUH7p8aVnZkpUBDHOCmzjrznVloShaZmaVn0ZrvvnZPOBHKQW7Q==
+=F77z
+-----END PGP MESSAGE-----
+
+*** another qiniu AK, SK, bucket, url                                :secret:
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+hQEMA/UK1fWnkkUVAQf/bhx1XcJtVzhFw4pHB2V1YneJ3t6F+/FmHxiyJEplW9EW
+LA9tsKxGoK46fuMBTLMLJB8kBRzRHKEvKuY8UgswEjUzdVSe9ve3xjMr8UqIDe+h
+9Cs/1sY1yn+L/A+76NfsjzcFkiqWVnbWb50xh0/+rp+XizuNi0ErzMuQ55W19RJW
+nNoOW+1jFHze/49KCJ7HKHgAbjGRw4heGXeGhYU5TbnjY4PuaYs1yVREkiaO713B
+tCZwMBoeO/9w2kzXYaSiwS9PWz8gtwIXKhbrFb5chf1DtOEXIwxXWBNTQgrqmE+M
+LsKWU6Gtg1IJon3oQNxbGpGBI1SRKFRdRLZGkzfccdLAJAFie1K7wJYzBbNImZLp
+lNo+KZX9l/R+olIqBtfOJlEL+sv/tFPA08RdDazp5VNi1EKUE6wBAiqLtIIcsHqY
+ZVXI4TCXaKbLX0dSRYJyrLZ6iM8w4/JEKA+4AhCNnBrk6AuQoATDj/aNn22X8Df3
+GlqyU+aajoHPQEAtJ+zdLefN6Ut9nl/a83k2wEOJfWyGZKcSS/+sUsvJEWzjp/36
+rT1QjpOBDkdYVLU3+u0Cc+TO/XrNc7OJykVI2l5VhT/sShHYzZkecl+bJgqKeXVP
+CVw7n44YBVytRUflWxCKtyXwUcEb8Q==
+=MGIZ
+-----END PGP MESSAGE-----
+
+* Emacs
+
+** configs
+
+Put this in our =.emacs.d/init.el=
+
+#+BEGIN_EXAMPLE emacs-lisp
+(load "~/.emacs.d/tzx-conf.el")
+#+END_EXAMPLE
+
+and tangle out this file to =~/.emacs.d/tzx-conf.el=
+
+#+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/tzx-conf.el
+  ;; DON't edit this file, it's tangled out by emacs
+  ;; edit it from github:district10:orgit repo.
+  ;; and use C-[cvt] to tangle out the code
+  ;; e.g. #+BEGIN_SRC emacs-lisp :tangle ~/.emacs.d/tzx-conf.el
+
+  ;; org-mode export settings
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (setq org-html-htmlize-output-type 'css)
+  (setq org-html-htmlize-font-prefix "org-")
+
+  ;; pgp encrpytion
+  (require 'org-crypt)
+  (org-crypt-use-before-save-magic)
+  (setq org-crypt-tag-matcher "secret")
+  (setq org-tags-exclude-from-inheritance (quote ("secret")))
+  (setq org-crypt-key "TANG ZhiXiong")
+
+  ;; plant uml jar path
+  (setq org-plantuml-jar-path "~/bin/plantuml.jar")
+
+  ;; org-babel
+  (org-babel-do-load-languages
+    'org-babel-load-languages
+    '((C . t)
+      (ruby . t)
+      (ditaa . t)
+      (dot . t)
+      (emacs-lisp . t)
+      (java . t)
+      (js . t)
+      (perl . t)
+      (plantuml . t)
+      (python . t)
+      (matlab . t)
+      ;; (R . t)
+      (sh . t)))
+  (setq org-confirm-babel-evaluate nil)
+#+END_SRC
+
+** encription
+
+  #+BEGIN_EXAMPLE
+    $ gpg --gen-key
+    $ gpg --list-keys
+    $ gpg --armor --output public-key.txt --export <user-id>
+    $ gpg --armor --output private-key.txt --export-secret-keys
+    $ gpg --import private-key.txt
+    $ gpg --keyserver hkp://keys.gnupg.net --search-keys "TANG ZhiXiong"
+    gpg: searching for "TANG ZhiXiong" from hkp server keys.gnupg.net
+    (1)   TANG ZhiXiong <dvorak4tzx@qq.com>
+              2048 bit RSA key F071D6FE, created: 2016-02-08
+    Keys 1-1 of 1 for "TANG ZhiXiong".  Enter number(s), N)ext, or Q)uit > 1
+    gpg: requesting key F071D6FE from hkp server keys.gnupg.net
+    gpg: key F071D6FE: "TANG ZhiXiong <dvorak4tzx@qq.com>" not changed
+    gpg: Total number processed: 1
+    gpg:              unchanged: 1
+  #+END_EXAMPLE
+
+  add the tag: =C-[c {q/c}] secret RET=
+
+** decryption
+
+=org-decrypt-entry=
+
+** babel
+** code examples
+*** TODO rules
+*** graphics
+**** [[http://ditaa.sourceforge.net][ditaa]]
+**** [[http://graphviz.org/][Graphviz]]
+**** [[http://plantuml.com/][PlantUML]]
+
+*** general
+
+#+HEADER: :exports both
+#+HEADER: :var mystring="Sunday" :var myint=145 :var mydouble=3.14 :exports both
+#+HEADER: :includes '(<vector> <numeric> <iostream> <sstream>)
+#+HEADER: :flags -std=c++11
+#+BEGIN_SRC C++
+  inline void build_string(std::ostream& o) {}
+
+  template<class First, class... Rest>
+  inline void build_string(std::ostream& o, const First& value, const Rest&... rest) {
+      o << value;
+      build_string(o, rest...);
+  }
+
+  template<class... T>
+  std::string concat_string(const T&... value) {
+      std::ostringstream o;
+      build_string(o, value...);
+      return o.str();
+  }
+
+  int main(void ) {
+      printf ("mystring %s\n", mystring);
+      printf ("myint    %d\n", myint);
+      printf ("mydouble %g\n", mydouble);
+
+      int a = [](){ return 2; }();
+      int b = 5;
+      printf("a + b: %d\n", a+b);
+
+      std::vector<int> v( 100 );
+      std::iota( std::begin( v ), std::end( v ), 0 );
+      std::cout << v[7] << std::endl;
+
+      int year = 2016;
+      int month = 2;
+      int day = 18;
+      std::string date_string = concat_string(year, '-', month, '-', day);
+      std::cout << date_string << std::endl;
+      return 0;
+  }
+#+END_SRC
+
+#+RESULTS:
+| mystring  | Sunday |    |   |
+| myint     |    145 |    |   |
+| mydouble  |   3.14 |    |   |
+| a         |      + | b: | 7 |
+| 7         |        |    |   |
+| 2016-2-18 |        |    |   |
+
+besides =C=, =C++=, also supports:
+
+- emacs lisp
+- python
+- R
+- javascript
+- etc
+
+- =:cmdline= :: confs for executable
+- =:flags= :: compiler
+- =:main= :: "no" to prevent default wrapping
+- =:includes= :: C && C++ only
+- =:defines= :: C & C++ only
+
+*** multi languages
+**** ruby
+
+  #+header: :exports both
+  #+BEGIN_SRC ruby
+    require 'date'
+    "This file was last evaluated on #{Date.today}"
+  #+END_SRC
+
+  #+RESULTS:
+  : This file was last evaluated on 2016-02-18
+
+**** shell
+
+#+HEADER: :exports both
+#+BEGIN_SRC sh
+  echo "This file takes up `du -h configs.org | sed 's/\([0-9k]*\)[ ]*configs.org/\1/'`"
+#+END_SRC
+
+#+RESULTS:
+: This file takes up 4.0K
+
+**** java
+
+#+HEADER :exports both
+#+HEADER :flags HelloWorld
+    #+BEGIN_SRC java
+      public class HelloWorld {
+          public static void main( String[] args ) {
+              System.out.println( "Hello, World!" );
+          }
+      }
+    #+END_SRC
+
+**** R
+
+  - install R on linux: =sudo apt-get install r-base r-base-dev=
+  - run R repl: =R=
+  - install R package: =R CMD INSTALL <package-name>=
+
+  #+BEGIN_SRC R :exports both
+  sqrt(42)
+  #+END_SRC
+
+   #+BEGIN_SRC R :colnames yes
+    words <- tolower(scan("imurfather.org", what="", na.strings=c("|",":")))
+    t(sort(table(words[nchar(words) > 3]), decreasing=TRUE)[1:10])
+  #+END_SRC
+
+  #+RESULTS:
+  | #+begin_src | #+end_src | :exports | #+results: | both | todo | code | message----- | your | 9.05 |
+  |-------------+-----------+----------+------------+------+------+------+--------------+------+------|
+  |           8 |         8 |        6 |          6 |    5 |    5 |    4 |            4 |    4 |    3 |
+
+* system configs
+** TODO zsh
+
+#+BEGIN_SRC emacs-lisp :tangle ~/.zshrc
+  # don't edit this file, it's tangled by emacs.
+  export ZSH=/home/tzx/.oh-my-zsh
+  ZSH_THEME="robbyrussell"
+  HIST_STAMPS="yyyy-mm-dd"
+  plugins=(git colored-man-pages)
+  export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+  # export MANPATH="/usr/local/man:$MANPATH"
+  source $ZSH/oh-my-zsh.sh
+  # export LANG=en_US.UTF-8
+
+  if [[ -n $SSH_CONNECTION ]]; then
+    export EDITOR='vim'
+  else
+    export EDITOR='vim'
+  fi
+
+  # eval $(thefuck --alias)
+  alias get='sudo apt-get install'
+
+  alias ems='emacs --daemon'
+  alias emx='emacsclient -e "(kill-emacs)"'
+  alias ec='emacsclient -t'
+  alias ect='emacsclient -t'
+  alias ecc='emacsclient -c'
+
+  alias tig='git commit -am "lazy commit" && git push'
+  alias win='sudo mount -t vboxsf -o uid=1000,gid=1000 shared /home/tzx/shared/'
+  alias cbd='killall VBoxClient && VBoxClient-all'
+  alias clip="xclip -selection clipboard"
+
+  alias crop="scrot"
+
+  alias gall="git add -A && git commit -m \"lazy commit\" && git push"
+  alias gal="git add -A && git commit -m \"lazy commit\""
+  alias neo="cd ~/bin && ./neo.sh"
+  alias mod="vim ~/.zshrc && source ~/.zshrc"
+  alias search="sudo apt-cache search"
+
+  alias git=hub
+
+  PATH="/home/tzx/bin/node-v4.3.1-linux-x86/bin:/home/tzx/bin:$PATH"
+#+END_SRC
+
+** ssh-keyseys
+*** pubkeys
+
+- should be tangled out to =~/.ssh/id_rsa.pub=
+- after tangling, you should run =chmod 600 ~/.ssh/id_rsa=
+
+#+BEGIN_SRC plain :tangle ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlxQ8qV+xaFArAzuTn5UUzmxTT+iENcWBwoeunCR4/bnugOue0W+amI8XEFVrfwjDLh+1NdMF2F6NjyIUEvXCMTvzAsyy6LpyYhfY7/scImmiIvd6TewdIrnCNDEAEBBmh0K+iEelWSj6Ob58UwH81kkS/hTJXOqrodV748MadVkdIOV2154ctINSPbFqlcfhFbSDTXQwso1BsZMUnLtP0h2MXR79Vn5sveIrWcK3qnNXmcyiLvprjPuia4LbBBQWJFajrvgUPQ+lARtGPBA1ApMB0YaNo+Sy6umt7YhVAZ2Penh+AsVORn3I2EvLiUdNaVjdYKiUgJqFmcXMnSslT tzx@lubuntu
+#+END_SRC
+
+*** secret keys                                                      :secret:
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+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
+okQVtPn/MWMP12FnClFL8U5k
+=Gi8/
+-----END PGP MESSAGE-----
+
+** gpg
+*** gpg-pubkey
+
+#+BEGIN_SRC plain :tangle ~/gpg-public.txt
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v1
+
+mQENBFa4tI8BCADx5hl3HtYTYfWqU9SclMcqWyuYXj86o+MYeNmbEGdniur59pEj
+cGrN8bHwRWYWopC90BmQU3v5UUXS7smRrnw/MRM1NZjW9xBJ1O2Jn1pOjdyh/7pK
+zQ0fS0m714pLiUoomduag7OZUdcS7fQMN5hH0V5DizfVQKVGE8x2noEVqVU5cncd
+JvVYEVR1OMfk/XFuLo9IxqhE2KRcq/96w5uark8q4f8im7Cs25XLwx5UFfpz2oCB
+reVbsQ72gruYBNnN6T+BRXpB7gJ93EoFtr+korx325pKcprAwCnnvaGB7XQEmIMV
+zb4taMot4aZ7i/u+YxjxNkSPRLIhIplwmoMJABEBAAG0IVRBTkcgWmhpWGlvbmcg
+PGR2b3JhazR0enhAcXEuY29tPokBOAQTAQIAIgUCVri0jwIbAwYLCQgHAwIGFQgC
+CQoLBBYCAwECHgECF4AACgkQA1+ejfBx1v7JGgf9GKCCRpDS9teGBXdmz5apNyUH
+PU5BAmhfn586Cyvrc0l3c0H0lXEcY75dazJr2dGe8fwRKk7oA6eITAA15jbXsF9F
+JKTPqGEadWWwcenW+z8SwC7sQv80iZYRPI9/RoWPF5Nrx84IAd5ffP1PNpP5lgGy
+EH6D0BrK/JsRKsArVYBZwFGmXWHbTrL+JuHrXc/hsqamkjzPD+VjTstsF7DpNN+Z
+8dOEycZmmI7cfV+2SxdudcBUv+rEtOVOs2DqCHRAHlRtaFGhipibH7FNHjdxJbfG
+okQE5ry55WI/Adk0VTaDXO2BPH6BLNmMtnvJrT0B1or8/23iCbGtgkg/KBajSLkB
+DQRWuLSPAQgAq2KiBNMvkrlKR7MAvioOAkV/7jBtV+ueRexpSnhohfJpgxgy2egH
++npaCnSAV4+3c20zHE/ay9VkIiJZpSGzK2fgvm5kbvLqeTAgkc8T2uf/eR4WmSCR
+LEwGYGAPO1uEUQYhEnu+ROx7fONWtWdxlp+yTTVi6PXksOCGez62HHWWEMnRmEyE
+YpywxQpcfVOXsdzy0IJzLNQQm/TY85OABU5c/3NZwfnLg72SW0THyD9qHEuYq3ef
+F/PPgIqqP/xXzvsRB1Clah0BBWqPBVlppiIE1u74C5v9wyDw8BbQNe7fjt536eD4
+BH9TOzq+JpkjOKEX3Yfi2ICi0GgONLxfWQARAQABiQEfBBgBAgAJBQJWuLSPAhsM
+AAoJEANfno3wcdb+eigH/2aVBG0csKDO/Yknp5nJubxk/iadmYUhYo1D1tqXNVr+
+ZryJfFu4c9kMwi5JYZxCCB/XMYgoHNjo8m5KWa5JMarrrFk3nX203ruVPSDe3mu/
+35LkFvQiYnv5m5HNAR7nV8TQ5UvPnu0GvtrK99IQTu3naF3do3WigKaqpmymAxaj
+maz6LzCRbbmRuciLp/u6c/fGSEbRSMPlMOWa+ILMmOyzzLKg+pgQNuEAXLXYIuGc
+2WHGrt8+TyzllQCi3sWa45DY3MpU0mQeNmLmKKEK0J5pmh+edK3Cy++LebIbwqTM
+ynyAyrI6jGJ7F7YZTD/SDWp+964qg+ZDEVmOLJ3116o=
+=kN5x
+-----END PGP PUBLIC KEY BLOCK-----
+#+END_SRC
+
+*** gpg-private key                                                  :secret:
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1
+
+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
+=eYlz
+-----END PGP MESSAGE-----
+
+
+* Footnotes
+
+#+INCLUDE: footer.org
