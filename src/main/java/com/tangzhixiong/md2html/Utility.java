@@ -1,4 +1,4 @@
-package com.tangzhixiong.java;
+package com.tangzhixiong.md2html;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -34,20 +34,29 @@ public class Utility {
         Runtime runtime = Runtime.getRuntime();
         String outputPathHTML = outputPath.substring(0, outputPath.length()-3) + ".html";
         String pathBasedOnRoot = outputPath.substring(Bundle.dstDir.length()+1);
-        String cmd = String.format( "pandoc -S -s --ascii --mathjax " +
-                        "-f markdown+abbreviations+east_asian_line_breaks+emoji " +
-                        "-V rootdir=%s -V md2htmldir=%s/ -V thispath=%s --template %s %s '%s' -o '%s'",
-                        resolveToRoot(outputPath, Bundle.dstDir), Bundle.resourceDirName, pathBasedOnRoot.replace('\\', '/'),
-                        Bundle.htmltemplatePath, Bundle.dotmd2htmlymlPath,
-                        outputPath, outputPathHTML);
-        // TODO: update mapping: thispath -> title
+        ArrayList<String> cmds = new ArrayList<>();
+        {
+            cmds.add( "pandoc" ); cmds.add( "-S" ); cmds.add( "-s" );
+            cmds.add( "--ascii" );
+            cmds.add( "--mathjax" ); cmds.add( "-f" );
+            cmds.add( "markdown+abbreviations+east_asian_line_breaks+emoji" );
+            cmds.add( "-V" ); cmds.add( "\"rootdir="+resolveToRoot(outputPath, Bundle.dstDir)+"\"" );
+            cmds.add( "-V" ); cmds.add( "\"md2htmldir="+Bundle.resourceDirName+"/\"");
+            cmds.add( "-V" ); cmds.add( "\"thispath="+pathBasedOnRoot+"\"" );
+            cmds.add( "--template" );
+            cmds.add( "\""+Bundle.htmltemplatePath+"\"" );
+            cmds.add( "\""+Bundle.dotmd2htmlymlPath+"\"" );
+            cmds.add( "\""+outputPath+"\"" );
+            cmds.add( "-o" );
+            cmds.add( "\""+outputPathHTML+"\"" );
+
+        }
         try {
             if (!Config.silentMode) {
                 System.out.printf("[P] %s -> %s\n", outputPath, outputPathHTML);
             }
-            runtime.exec(cmd);
             // Process proc = runtime.exec(cmd);
-            // System.out.println("[L]: Error at: "+proc.getErrorStream().toString());
+            Process p = new ProcessBuilder().inheritIO().command(cmds).start();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -285,8 +294,9 @@ public class Utility {
             return Files.readAllLines(new File(inputPath).toPath(), Charset.defaultCharset() ); // UTF-8
         }
         catch (IOException e) {
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(new File(inputPath)));
+            try (
+                    BufferedReader reader = new BufferedReader(new FileReader(new File(inputPath)));
+            ) {
                 String line;
                 ArrayList<String> lines = new ArrayList<>();
                 while((line = reader.readLine()) != null) {
@@ -339,9 +349,10 @@ public class Utility {
             System.err.println(sb.toString());
             return lines;
         }
-        try {
+        try (
+                Scanner scanner = new Scanner(inputFile);
+        ) {
             params.parents.add(inputPath);
-            Scanner scanner = new Scanner(inputFile);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 InclusionParams paramsAnother = new InclusionParams();

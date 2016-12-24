@@ -1,8 +1,5 @@
-package com.tangzhixiong.java;
+package com.tangzhixiong.md2html;
 
-import com.sun.javafx.webkit.UtilitiesImpl;
-
-import javax.sound.midi.SysexMessage;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
@@ -25,6 +22,13 @@ class Config {
 
 public class Main {
     public static void main(String[] args) {
+        try {
+            Process p = new ProcessBuilder().inheritIO().command(new String[]{"pandoc", "-v"}).start();
+        } catch (Exception e) {
+            System.out.println("[X] Missing pandoc, go download: http://pandoc.org/");
+            System.exit(0);
+        }
+
         try {
             // hacks copied from StackOverflow: http://stackoverflow.com/questions/361975/setting-the-default-java-character-encoding
             System.setProperty("file.encoding", "UTF-8");
