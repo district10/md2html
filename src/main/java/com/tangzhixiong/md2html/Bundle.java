@@ -20,6 +20,9 @@ public class Bundle {
     };
     public static String[] markupExtsString = {
             "org",
+            "rst",
+            "asc",
+            "asciidoc",
             "tex",
             "texi",
             "textile",

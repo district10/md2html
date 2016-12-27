@@ -6,3 +6,6 @@ clean:
 	rm -rf publish/ target/
 test: target/md2html.jar
 	java -jar $< -i demo/ -o publish
+
+gh:
+	git add -A; git commit -m "deal"; git push;
