@@ -1,0 +1,471 @@
+[[Category:Tutorials]] [[Category:Language]]
+Haskell is a computer programming language.  In particular, it is a
+'' [[Polymorphism|polymorphically]] [[typing|statically typed]], [[Lazy evaluation|lazy]], [[functional programming|purely functional]] '' language,
+quite different from most other programming languages. 
+The language is named for [[Haskell Brooks Curry]], whose work in mathematical logic serves as a foundation for
+functional languages.   
+Haskell is based on the ''[[lambda calculus]]'', hence the lambda we use as a logo.
+
+
+==Why use Haskell?==
+Writing large software systems that
+work is difficult and expensive.  Maintaining those systems is even
+more difficult and expensive.  Functional programming languages, such
+as Haskell, can make it easier and cheaper.  For example, a new user who
+wrote a small relational DBMS in Haskell had this to say:
+<blockquote>
+WOW!  I basically wrote this without testing just thinking about my
+program in terms of transformations between types.  I wrote the
+test/example code and had almost no implementation errors in the code!  The
+compiler/type-system is really really good at preventing you from
+making coding mistakes!  I've never in my life had a block of code
+this big work on the first try.  I am WAY impressed.
+</blockquote>
+Even if you are not in a position to use Haskell in your programming projects, learning Haskell can make you a better programmer in any language.  
+<blockquote>
+I learned Haskell a couple of years ago, having previously programmed in
+Python and (many) other languages.  Recently, I've been using Python for a
+project (the choice being determined by both technical and non-technical
+issues), and find my Python programming style is now heavily influenced (for the better, I hope ;-) by my Haskell programming experience.<br><br>
+Graham Klyne
+</blockquote>
+
+
+Haskell offers you:
+
+*Substantially increased programmer productivity (Ericsson measured an improvement factor of between 9 and 25 using Erlang, a functional programming language similar to Haskell, in one set of experiments on telephony software).
+*Shorter, clearer, and more maintainable code.
+*Fewer errors, higher reliability.
+*A smaller &quot;semantic gap&quot; between the programmer and the language.
+*Shorter lead times.
+
+Haskell is a wide-spectrum language, suitable for a variety of
+applications.  It is particularly suitable for programs which need to
+be highly modifiable and maintainable.
+
+Much of a software product's life is spent in ''specification'',
+''design'' and ''maintenance'', and not in ''programming''.
+Functional languages are superb for writing specifications which can
+actually be executed (and hence tested and debugged).  Such a
+specification then ''is'' the first prototype of the final
+program.
+
+Functional programs are also relatively easy to maintain, because the
+code is shorter, clearer, and the rigorous control of side effects
+eliminates a huge class of unforeseen interactions.
+
+==What is functional programming?==
+C, Java, Pascal, Ada, and so on, are all ''imperative''
+languages.  They are &quot;imperative&quot; in the sense that they
+consist of a sequence of commands, which are executed strictly one
+after the other.  Haskell is a ''functional'' language.  A
+functional program is a single expression, which is executed by
+evaluating the expression. 
+
+Anyone who has used a spreadsheet has experience of functional
+programming.  In a spreadsheet, one specifies the value of each cell
+in terms of the values of other cells.  The focus is on ''what'' is
+to be computed, not ''how'' it should be computed.  For
+example:
+*we do not specify the order in which the cells should be calculated -&nbsp;instead we take it for granted that the spreadsheet will compute cells in an order which respects their dependencies.
+*we do not tell the spreadsheet how to allocate its memory - rather, we expect it to present us with an apparently infinite plane of cells, and to allocate memory only to those cells which are actually in use.
+*for the most part, we specify the value of a cell by an ''expression'' (whose parts can be evaluated in any order), rather than by a ''sequence of commands '' which computes its value.
+
+An interesting consequence of the spreadsheet's unspecified order
+of re-calculation is that the notion of assignment is not very useful.
+After all, if you don't know exactly when an assignment will
+happen, you can't make much use of it!  This contrasts strongly
+with programs in conventional languages like C, which consist
+essentially of a carefully-specified sequence of assignments, or Java,
+in which the ordering of method calls is crucial to the meaning of a
+program. 
+
+This focus on the high-level &quot;what&quot; rather than the
+low-level &quot;how&quot; is a distinguishing characteristic of
+functional programming languages.
+
+Another well-known nearly-functional language is the standard database
+query language SQL.  An SQL query is an expression involving
+projections, selections, joins and so forth.  The query says what
+relation should be computed, without saying how it should be computed.
+Indeed, the query can be evaluated in any convenient order. SQL
+implementations often perform extensive query optimization which
+(among other things) figures out the best order in which to evaluate
+the expression.
+
+==What's good about functional programming?==
+
+Spreadsheets and SQL are both fairly specialized languages.  Functional
+programming languages take the same ideas and move them into the realm
+of general-purpose programming. To get an idea of what a functional
+program is like, and the expressiveness of functional languages, look at
+the following quicksort programs.  They both sort a sequence of numbers
+into ascending order using a standard method called "quicksort". The
+first program is written in Haskell and the second in C. 
+
+Whereas the C program describes the particular steps the machine must
+make to perform a sort -- with most code dealing with the low-level
+details of data manipulation -- the Haskell program encodes the sorting
+algorithm at a much higher level, with improved brevity and clarity as
+a result (at the cost of efficiency unless compiled by a very smart compiler):
+
+===Quicksort in Haskell===
+
+The first thing to know about Haskell's syntax is that parentheses are used for grouping, and not for function application.  The application of a function <hask>f</hask> to an argument <hask>x</hask> is written <hask>f x</hask>, not <hask>f(x)</hask>.  It can be written as <hask>(f x)</hask> to separate it from its surroundings.
+
+<haskell>
+quicksort :: Ord a => [a] -> [a]
+quicksort []     = []
+quicksort (p:xs) = (quicksort lesser) ++ [p] ++ (quicksort greater)
+    where
+        lesser  = filter (< p) xs
+        greater = filter (>= p) xs
+
+</haskell>
+The parentheses indicate the grouping of operands on the right-hand side of equations.  On the left they indicate ''patterns'' of a function's argument(s).  The parentheses around the two function calls <code>(quicksort lesser)</code> and <code>(quicksort greater)</code> are not necessary &ndash; because function application binds tighter than infix operators &ndash; and are there just for clarity.
+
+Here <code>[]</code> stands for empty list, <code>[p]</code> for a singleton list holding one element <code>p</code>, <code>++</code> is a built-in list concatenation operator, and the two <code>filter</code> calls use two on-the-fly built predicates, first for getting all the elements of <code>xs</code> that are smaller than the pivot element <code>p</code>, and the other - all those greater than, or equal to it.
+
+This definition uses Haskell's ability to define functions as equations with pattern-matching clauses: here the first one, with <code>[]</code> pattern for an empty list on its left-hand side, and the second, with <code>(p:xs)</code> pattern on its left-hand side standing for non-empty list with the head element <code>p</code> (used as a pivot element), and the tail <code>xs</code> (which is read, by convention, as ''axes'', suggesting that it is a list of several ''xs'', viz. elements ''"x"'').
+
+The very first line above is the function's ''type signature'': it says that <code>quicksort</code> transforms a list of elements of some type <code>a</code> (usually read "alpha") into a list of the same type, for a type <code>a</code> that is an instance of typeclass <hask>Ord</hask> (which means that comparison operations are defined for it, so elements of type <code>a</code> can be compared with one another).
+
+===Quicksort in C===
+
+True quicksort in C sorts in-place:
+<pre>
+// To sort array a[] of size n: qsort(a,0,n-1)
+
+void qsort(int a[], int lo, int hi) 
+{
+  int h, l, p, t;
+
+  if (lo &lt; hi) {
+    l = lo;
+    h = hi;
+    p = a[hi];
+
+    do {
+      while ((l &lt; h) &amp;&amp; (a[l] &lt;= p)) 
+          l = l+1;
+      while ((h &gt; l) &amp;&amp; (a[h] &gt;= p))
+          h = h-1;
+      if (l &lt; h) {
+          t = a[l];
+          a[l] = a[h];
+          a[h] = t;
+      }
+    } while (l &lt; h);
+
+    a[hi] = a[l];
+    a[l] = p;
+
+    qsort( a, lo, l-1 );
+    qsort( a, l+1, hi );
+  }
+}
+</pre>
+
+A [[/Direct Translation | semi-direct translation]] of the C code is here.
+
+Let's examine some of the benefits of Haskell and functional programming.
+A more detailed case for functional programming can be found in 
+
+<BLOCKQUOTE>
+[http://www.cse.chalmers.se/~rjmh/Papers/whyfp.pdf '''Why Functional Programming Matters'''] by [http://www.cse.chalmers.se/~rjmh/ John Hughes], The Computer
+Journal, Vol. 32, No. 2, 1989, pp. 98 - 107. Also in: David A. Turner
+(ed.): Research Topics in Functional Programming, Addison-Wesley,
+1990, pp. 17 - 42. 
+</BLOCKQUOTE>
+A slightly less formal essay inspired by the paper above can be found in
+<BLOCKQUOTE>
+[[Why Haskell matters |'''Why Haskell Matters''']] originally by [mailto:sylvan@dtek.chalmers.se Sebastian Sylvan]
+</BLOCKQUOTE>
+
+===Ease of understanding===
+Functional programs are often easier to '''understand''': it is usually possible to get their meaning at a glance. The same certainly cannot be said of the C program.  It takes quite a while to understand, and even when you do understand it, it is extremely easy to make a small slip and end up with an incorrect program. 
+
+Here is a detailed explanation of the Haskell quicksort:
+
+<haskell>
+quicksort []     = []
+</haskell>
+The first clause reads: "The result of sorting an empty list (<tt>[]</tt>) is just an empty list (<tt>[]</tt>)".  
+
+<haskell>
+quicksort (p:xs) = (quicksort lesser) ++ [p] ++ (quicksort greater)
+    where
+        lesser  = filter (< p) xs
+        greater = filter (>= p) xs
+</haskell>
+The second clause reads: "The result of sorting a non-empty list whose first element will be henceforth referred to as <tt>p</tt> and
+the rest of which will be referred to as <tt>xs</tt>, is a result of concatenating three sublists: first the result of sorting the elements of <tt>xs</tt> that are less than <tt>p</tt>, then <tt>p</tt> itself, and then the result of sorting the elements of <tt>xs</tt> that are greater than or equal to <tt>p</tt>."
+
+===Brevity===
+Functional programs tend to be much more '''concise''', shorter by a factor of two to ten usually, than their imperative counterparts.  
+
+The above could be written even more concisely with the help of [[list comprehension]]s:
+<haskell>
+qsort (p:xs) = qsort [x | x<-xs, x<p] ++ [p] ++ qsort [x | x<-xs, x>=p]
+</haskell>
+
+The first sub-expression means, for <code>x</code> drawn from <code>xs</code> in order, such that <code>x < p</code>, collect <code>x</code>s in a list and call the <code>qsort</code> function with it, recursively. Similarly for the last one.
+
+===No core dumps===
+Most functional languages, and Haskell in particular, are '''strongly
+typed''', eliminating a huge class of easy-to-make errors at compile
+time.   In particular, strong typing means '''no core dumps'''!
+There is simply no possibility of treating an integer as a pointer, or
+following a null pointer.
+
+===Code re-use===
+Of course, strong typing is available in many imperative languages, such as Ada or Pascal.  However, Haskell's type system is much less restrictive than, say, Pascal's, because it uses '''[[polymorphism]]'''.
+
+For example, the qsort program given in Figure 1 will not only sort lists of integers, but also lists of floating point numbers, lists of characters, lists of lists; indeed, it will sort lists of ''anything'' for which it is meaningful to have "less-than" and "greater-than" operations. In contrast, the C version can only sort an array of integers, and nothing else.
+
+Polymorphism enhances re-usability.
+
+===Strong glue===
+"Non-strict" functional languages, such as Haskell, have another powerful feature: they
+only evaluate as much of the program as is required to get the answer
+- this is called [[Haskell/Lazy evaluation |'''lazy evaluation''']].   This feature is rather
+like Unix pipes.  For example, the Unix command
+<pre>
+grep printf Foo.c | wc
+</pre>
+counts the number of lines in the file <tt> Foo.c </tt>that include the
+string <tt>printf</tt>.
+The command 
+<pre>
+grep printf Foo.c
+</pre>
+produces all lines which contain the string &quot;<tt>printf</tt>&quot;,
+while the &quot;<tt>wc</tt>&quot; command counts them.  The pipe,
+written &quot;<tt>|</tt>&quot;, takes the output from the first command
+and delivers it to the second.  The two commands execute together, so
+that the output of the first is consumed more-or-less immediately by
+the second.  In this way, no large intermediate files need be
+produced.  You can think of <tt>wc</tt> &quot;demanding&quot;
+lines from the <tt>grep</tt>.
+
+If the second command only needs some of the output of the first, then
+execution of the first command might never need to be completed.  For
+example,
+
+<pre>
+grep printf Foo.c | head 5
+</pre>
+just prints the first 5 lines which contain &quot;<tt>printf</tt>&quot;.
+There is no need to modify the <tt>grep</tt> command to take account of
+the fact that its execution might be abandoned.
+
+[[Lazy vs. non-strict |Non-strict]] languages provide exactly this kind of demand-driven
+evaluation.  Data structures are evaluated just enough to deliver the
+answer, and parts of them may not be evaluated at all.  As in the case
+of Unix commands, this provides powerful &quot;glue&quot; with which
+to compose existing programs together.  What this means is that it is
+possible to '''re-use programs''', or pieces of programs, much more
+often than can be done in an imperative setting.  [[Haskell/Lazy evaluation |Lazy evaluation]] allows us to write more '''[[modular programs]]'''.
+
+===Powerful abstractions===
+In general, functional languages offer powerful new ways to
+encapsulate '''abstractions'''.  An abstraction allows you to define
+an object whose internal workings are hidden; a C procedure, for
+example, is an abstraction.  Abstractions are ''the'' key to
+building modular, maintainable programs, so much so that a good
+question to ask of any new language is "what mechanisms for
+abstraction does it provide?". 
+
+One powerful abstraction mechanism available in functional languages
+is the '''[[higher order function]]'''.  In Haskell a function is a
+first-class citizen: it can freely be passed to other functions,
+returned as the result of a function, stored in a data structure, and
+so on.  It turns out that the judicious use of higher order functions
+can substantially improve the structure and modularity of many
+programs.
+
+===Built-in memory management===
+Very many sophisticated programs need to allocate dynamic memory from a heap.  In C this is done with a call to <tt> malloc</tt>, followed by code to initialize the store just allocated.  The programmer is responsible for returning the store to the free pool when it isn't needed any more, a notorious source of "dangling-pointer" errors. To make matters worse, <tt>malloc</tt> is fairly expensive performance-wise, so programmers often <tt>malloc</tt> a  single large chunk of store, and then allocate "by hand" out of this.
+
+Every functional language relieves the programmer of this storage management burden.  Store is allocated and initialized implicitly, and recovered automatically by the garbage collector.  The technology of storage allocation and garbage collection is now well developed, and the performance costs are rather slight.
+
+==When C is better==
+It isn't all roses, of course.  The C quicksort uses an extremely
+ingenious technique, invented by Hoare, whereby it sorts the array
+''in place''; that is, without using any extra storage.  As a
+result, it runs quickly, and in a small amount of memory.  In
+contrast, the Haskell program allocates quite a lot of extra memory
+behind the scenes, and runs rather slower than the C program. 
+
+In effect, the C quicksort does some very ingenious storage
+management, trading this algorithmic complexity for a reduction in
+run-time storage management costs.
+
+In applications where [[performance]] is required at any cost, or when the
+goal is detailed tuning of a low-level algorithm, an imperative
+language like C would probably be a better choice than Haskell,
+exactly because it provides more intimate control over the exact way
+in which the computation is carried out - that is, until sufficiently smart compiler appears that is able to derive the C equivalent from the Haskell one-liner, all by itself.
+
+===Functional vs imperative===
+But few programs require performance at any cost!   After all, we all
+stopped writing assembly-language programs, except perhaps for key
+inner loops, long ago.   The benefits of having a more supportive
+programming model (an arbitrary number of named, local variables
+instead of a fixed number of registers, for example) far outweigh the
+modest run-time costs.
+
+Similarly, we willingly accept the costs of a virtual memory paging
+system, in exchange for the more supportive programming model of an
+infinite virtual address space.  The days of explicit memory overlays
+are over.
+
+Functional languages take another large step towards a higher-level
+programing model.  Programs are easier to design, write and maintain,
+but the language offers the programmer less control over the machine.
+For most programs the result is perfectly acceptable.
+
+==What is Haskell?==
+Haskell is a modern, standard, non-strict, purely-functional
+programming language.  It provides all the features sketched above,
+including polymorphic typing, lazy evaluation and higher-order
+functions.  It also has an innovative type system which supports a
+systematic form of overloading and a module system.
+
+It is specifically designed to handle a wide range of applications,
+from numerical through to symbolic.  To this end, Haskell has an
+expressive syntax, and a rich variety of built-in data types,
+including arbitrary-precision integers and rationals, as well as the
+more conventional integer, floating-point and boolean types.
+
+There are a number of [[implementations|compilers and interpreters]] available.  All are
+free.  The recommend way to install Haskell on your computer is through the the [http://hackage.haskell.org/platform/ Haskell Platform].
+
+See also the [[History of Haskell]].
+
+==Does anyone use functional programming?==
+Functional programming languages are used in substantial applications.
+For example:
+* Software AG, a major German software company, market an expert system (Natural Expert) which is programmed in a functional language.  Their users find it easy to develop their applications in this language, through which they gain access to an underlying database system.  It all runs on an IBM mainframe.
+*Ericsson have developed a new functional language, Erlang, to use in their future telephony applications.  They have already written 130k-line Erlang applications, and find them very much shorter and faster to develop.
+*Amoco ran an experiment in which they re-coded in Miranda, a lazy functional language, a substantial fraction of their main oil-reservoir simulation code, a critical application.  The resulting program was vastly shorter, and its production revealed a number of errors in the existing software.  Amoco subsequently transcribed the functional program into C++ with encouraging results.
+*A researcher at the MITRE corporation is using Haskell to prototype his digital signal-processing applications.
+*Researchers at Durham University used Miranda, and later Haskell, in a seven-year project to build LOLITA, a 30,000-line program for natural-language understanding.
+*Query is the query language of the O2 object-oriented database system. O2Query is probably the most sophisticated commercially-available object-oriented database query language  and it is a functional language.
+*ICAD Inc market a CAD system for mechanical and aeronautical engineers.  The language in which the engineers describe their design is functional, and it uses lazy evaluation extensively to avoid recomputing parts of the design which are not currently visible on the screen.  This results in substantial performance improvements.
+*An incestuous example: the Glasgow Haskell compiler is written in Haskell: a 100,000-line application.
+*[http://pugscode.org Pugs], the leading perl6 implementation is written in Haskell
+*As is [http://darcs.net Darcs], a cutting edge distributed revision control system
+
+Some other examples of [[Haskell in practice]].
+
+Clifford Beshers, of [http://www.linspire.com/ Linspire Inc]., describes their experience with Haskell, and functional programming:
+
+<blockquote>
+Linspire, Inc. has used functional programming since its inception in
+2001, beginning with extensive use of O'Caml, with a steady shift to
+Haskell as its implementations and libraries have matured.  Hardware
+detection, software packaging and CGI web page generation are all areas
+where we have used functional programming extensively.
+</blockquote>
+
+<blockquote>
+Haskell's feature set lets us replace much of our use of little
+languages (e.g., bash or awk) and two-level languages (C or C++ bound to
+an interpreted language), allowing for faster development, better code
+sharing and ultimately faster implementations. Above all, we value
+static type checking for minimizing runtime errors in applications that
+run in unknown environments and for wrapping legacy programs in strongly
+typed functions to ensure that we pass valid arguments.
+</blockquote>
+
+==Other frequently-asked questions==
+
+There is also a [[FAQ|larger FAQ]] in progress.
+
+===''Is functional programming hard to learn?''===
+<blockquote>
+Functional programming does require a change in perspective, which
+some programmers find hard.  But Ericsson's experience in training
+programmers in Erlang is that most find the transition easy -
+provided they take the training need seriously rather than assuming
+that they can "pick it up on the day".
+</blockquote>
+===''Aren't functional programs very slow?''===
+<blockquote>They used to be, perhaps 20 years ago. But the compilers
+have long since caught up. Haskell programs run fast for all but the
+most performance-demanding applications. At the time of writing, Haskell
+compiled via GHC is in 2nd place (behind C) in the 
+[http://shootout.alioth.debian.org/gp4/benchmark.php?test=all&lang=all Great Language Shootout],
+with other functional languages also ranked highly.
+</blockquote>
+
+===''I already have a large application in C or C++.''===
+Also worded as: ''Can I benefit from functional programming without rewriting my whole system?''
+<blockquote>
+
+Haskell has been successfully integrated into existing applications in
+a number of ways. 
+[http://www.haskell.org/hdirect/ HaskellDirect] is
+an IDL (Interface Description Language) based tool that allows Haskell
+programs to work with software components.  Low level C/C++ interfaces
+can be generated with
+[http://hackage.haskell.org/package/greencard Green Card] or 
+[http://www.cse.unsw.edu.au/~chak/haskell/c2hs/ C->Haskell], allowing 
+tight integration between Haskell and C.  These tools have been used
+to build a large number of successful, mixed language systems.
+</blockquote>
+
+==='' What libraries does Haskell support?''===
+<blockquote>
+Many software libraries have been developed for Haskell.  See the
+[[Libraries and tools| list of Haskell libraries]] for a list of much of
+what is available.
+
+</blockquote>
+
+==='' What other software tools for Haskell are there? ''===
+<blockquote>
+Glasgow Haskell comes with a profiler which allows you to find which
+parts of your program are consuming most time and space.  Chalmers
+Haskell has a space-profiling tool, and a quasi-parallel simulator
+which allows you to experiment with running your program in
+parallel. Hugs also has some similar tools. For a complete list, check
+the [[Libraries and tools|tools page]].
+</blockquote>
+
+===''How can I ask for help?''===
+There is a large community of haskell users willing to help. They can be contacted on maillists, IRC, or StackOverflow
+
+
+===''Can I get a support contract or a help-line?''===
+<blockquote>
+It used to be the case that if you wanted help, you had to persuade a
+Haskell research group that your problem was interesting enough or
+important enough that they should spend time helping you for free.
+<br>
+Whilst that is still an option, there is now a
+[[Consultants|directory of Haskell Consultants]] who provide:
+
+*Support for compilers, tools and libraries.
+*Help with improving code quality (time, space, robustness,     maintainability, etc.) using code reviews and tools.
+*Help with using libraries, tools and advanced Haskell features such as type system extensions, exception handling, the foreign function interface, test harnesses, and concurrency.
+*Library and application development.
+*Staff training.
+
+These companies and individuals tend to work closely with those
+developing Haskell (indeed, they have usually made major
+contributions to Haskell themselves).  
+
+</blockquote>
+===''How can I learn Haskell?''===
+<blockquote>
+The easiest way to learn Haskell is with a [[Books|textbook]]. There are a lot of [[Tutorials|online tutorials]], but you'll have a much easier time to learn the basics from a book. After all, Haskell is very different from traditional mainstream languages, it's like learning programming anew.
+</blockquote>
+
+===''Comparisons to other languages''===
+<blockquote>
+[[Comparison of functional programming languages | Click to see a table comparing features of Haskell to similar languages]]
+</blockquote>
+
+''Based on a paper by Simon Peyton Jones.''

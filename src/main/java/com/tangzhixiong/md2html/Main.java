@@ -22,6 +22,10 @@ class Config {
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println();
+        System.out.println( Bundle.mdExts );
+        System.out.println( Bundle.markupExts );
+        System.out.println();
         try {
             Process p = new ProcessBuilder().inheritIO().command(new String[]{"pandoc", "-v"}).start();
         } catch (Exception e) {

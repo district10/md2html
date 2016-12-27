@@ -32,24 +32,27 @@ public class Utility {
 
     public static void md2html(String outputPath) {
         Runtime runtime = Runtime.getRuntime();
-        String outputPathHTML = outputPath.substring(0, outputPath.length()-3) + ".html";
+        int idx = outputPath.lastIndexOf(".");
+        String suffix = outputPath.substring(idx+1);
+        String outputPathHTML = outputPath.substring(0, idx) + ".html";
         String pathBasedOnRoot = outputPath.substring(Bundle.dstDir.length()+1);
         ArrayList<String> cmds = new ArrayList<>();
         {
             cmds.add( "pandoc" ); cmds.add( "-S" ); cmds.add( "-s" );
             cmds.add( "--ascii" );
-            cmds.add( "--mathjax" ); cmds.add( "-f" );
-            cmds.add( "markdown+abbreviations+east_asian_line_breaks+emoji" );
+            cmds.add( "--mathjax" );
             cmds.add( "-V" ); cmds.add( "\"rootdir="+resolveToRoot(outputPath, Bundle.dstDir)+"\"" );
             cmds.add( "-V" ); cmds.add( "\"md2htmldir="+Bundle.resourceDirName+"/\"");
             cmds.add( "-V" ); cmds.add( "\"thispath="+pathBasedOnRoot+"\"" );
             cmds.add( "--template" );
             cmds.add( "\""+Bundle.htmltemplatePath+"\"" );
-            cmds.add( "\""+Bundle.dotmd2htmlymlPath+"\"" );
+            if (Bundle.mdExts.contains(suffix.toLowerCase())) {
+                cmds.add( "-f" ); cmds.add( "markdown+abbreviations+east_asian_line_breaks+emoji" );
+                cmds.add( "\""+Bundle.dotmd2htmlymlPath+"\"" );
+            }
             cmds.add( "\""+outputPath+"\"" );
             cmds.add( "-o" );
             cmds.add( "\""+outputPathHTML+"\"" );
-
         }
         try {
             if (!Config.silentMode) {
@@ -87,8 +90,8 @@ public class Utility {
             mkdirHyphenPDollarAtD(outputFile);
             try {
                 // expand markdown file
-                boolean isMarkdownFile = inputPath.endsWith(".md");
-                if (isMarkdownFile) {
+                boolean isMarkupFile = Bundle.markupExts.contains(inputPath.substring(inputPath.lastIndexOf(".")+1));
+                if (isMarkupFile) {
                     // src/dir/file.md -> dst/dir/file.md
                     if (!Config.expandMarkdown) {
                         if (writeLog) {
@@ -103,7 +106,7 @@ public class Utility {
                         if (writeLog) {
                             System.out.printf("[E] %s -> %s\n", inputPath, outputPath);
                         }
-                        dump(lines, outputFile, isMarkdownFile);
+                        dump(lines, outputFile, isMarkupFile);
                     }
                     // TODO: update entry in search.xml
                     // dst/dir/file.md -> dst/dir/file.html

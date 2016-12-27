@@ -6,12 +6,37 @@ import java.nio.file.FileSystems;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.*;
 
 public class Bundle {
+    public static String[] mdExtsString = {
+            "Rmd",
+            "markdown",
+            "md",
+            "mdown",
+            "mdwn",
+            "mkd",
+            "mkdn",
+    };
+    public static String[] markupExtsString = {
+            "org",
+            "tex",
+            "texi",
+            "textile",
+            "wiki",
+            "docx",
+            "epub",
+    };
+    public static HashSet<String> mdExts = new HashSet<>();
+    public static HashSet<String> markupExts = new HashSet<>();
+    static {
+        for (String s : mdExtsString) {
+            mdExts.add(s.toLowerCase());
+        }
+        for (String s : markupExtsString) {
+            markupExts.add(s.toLowerCase());
+        }
+    };
 
     public static String srcDir;
     public static String dstDir;
