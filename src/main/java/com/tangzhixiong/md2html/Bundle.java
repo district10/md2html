@@ -18,7 +18,7 @@ public class Bundle {
                 "mdown", "mdwn", "mkd", "mkdn",
         };
         String[] markupExtsString = {
-                "asc", "asciidoc",
+                "adoc", "asc", "asciidoc",
                 "docx",
                 "epub",
                 "org",
@@ -50,6 +50,7 @@ public class Bundle {
     public static final String[] resources = {
             md2htmlymlRes,
             htmltemplateRes,
+            htmltemplateRes+"_",
             "jquery-3.0.0.min.js",
             "lazyload.min.js",
             "clipboard.min.js",

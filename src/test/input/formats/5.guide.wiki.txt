@@ -1,9 +1,9 @@
 [[Category:Tutorials]] [[Category:Language]]
 Haskell is a computer programming language.  In particular, it is a
 '' [[Polymorphism|polymorphically]] [[typing|statically typed]], [[Lazy evaluation|lazy]], [[functional programming|purely functional]] '' language,
-quite different from most other programming languages. 
+quite different from most other programming languages.
 The language is named for [[Haskell Brooks Curry]], whose work in mathematical logic serves as a foundation for
-functional languages.   
+functional languages.
 Haskell is based on the ''[[lambda calculus]]'', hence the lambda we use as a logo.
 
 
@@ -21,7 +21,7 @@ compiler/type-system is really really good at preventing you from
 making coding mistakes!  I've never in my life had a block of code
 this big work on the first try.  I am WAY impressed.
 </blockquote>
-Even if you are not in a position to use Haskell in your programming projects, learning Haskell can make you a better programmer in any language.  
+Even if you are not in a position to use Haskell in your programming projects, learning Haskell can make you a better programmer in any language.
 <blockquote>
 I learned Haskell a couple of years ago, having previously programmed in
 Python and (many) other languages.  Recently, I've been using Python for a
@@ -60,7 +60,7 @@ languages.  They are &quot;imperative&quot; in the sense that they
 consist of a sequence of commands, which are executed strictly one
 after the other.  Haskell is a ''functional'' language.  A
 functional program is a single expression, which is executed by
-evaluating the expression. 
+evaluating the expression.
 
 Anyone who has used a spreadsheet has experience of functional
 programming.  In a spreadsheet, one specifies the value of each cell
@@ -78,7 +78,7 @@ happen, you can't make much use of it!  This contrasts strongly
 with programs in conventional languages like C, which consist
 essentially of a carefully-specified sequence of assignments, or Java,
 in which the ordering of method calls is crucial to the meaning of a
-program. 
+program.
 
 This focus on the high-level &quot;what&quot; rather than the
 low-level &quot;how&quot; is a distinguishing characteristic of
@@ -101,7 +101,7 @@ of general-purpose programming. To get an idea of what a functional
 program is like, and the expressiveness of functional languages, look at
 the following quicksort programs.  They both sort a sequence of numbers
 into ascending order using a standard method called "quicksort". The
-first program is written in Haskell and the second in C. 
+first program is written in Haskell and the second in C.
 
 Whereas the C program describes the particular steps the machine must
 make to perform a sort -- with most code dealing with the low-level
@@ -136,7 +136,7 @@ True quicksort in C sorts in-place:
 <pre>
 // To sort array a[] of size n: qsort(a,0,n-1)
 
-void qsort(int a[], int lo, int hi) 
+void qsort(int a[], int lo, int hi)
 {
   int h, l, p, t;
 
@@ -146,7 +146,7 @@ void qsort(int a[], int lo, int hi)
     p = a[hi];
 
     do {
-      while ((l &lt; h) &amp;&amp; (a[l] &lt;= p)) 
+      while ((l &lt; h) &amp;&amp; (a[l] &lt;= p))
           l = l+1;
       while ((h &gt; l) &amp;&amp; (a[h] &gt;= p))
           h = h-1;
@@ -169,13 +169,13 @@ void qsort(int a[], int lo, int hi)
 A [[/Direct Translation | semi-direct translation]] of the C code is here.
 
 Let's examine some of the benefits of Haskell and functional programming.
-A more detailed case for functional programming can be found in 
+A more detailed case for functional programming can be found in
 
 <BLOCKQUOTE>
 [http://www.cse.chalmers.se/~rjmh/Papers/whyfp.pdf '''Why Functional Programming Matters'''] by [http://www.cse.chalmers.se/~rjmh/ John Hughes], The Computer
 Journal, Vol. 32, No. 2, 1989, pp. 98 - 107. Also in: David A. Turner
 (ed.): Research Topics in Functional Programming, Addison-Wesley,
-1990, pp. 17 - 42. 
+1990, pp. 17 - 42.
 </BLOCKQUOTE>
 A slightly less formal essay inspired by the paper above can be found in
 <BLOCKQUOTE>
@@ -183,14 +183,14 @@ A slightly less formal essay inspired by the paper above can be found in
 </BLOCKQUOTE>
 
 ===Ease of understanding===
-Functional programs are often easier to '''understand''': it is usually possible to get their meaning at a glance. The same certainly cannot be said of the C program.  It takes quite a while to understand, and even when you do understand it, it is extremely easy to make a small slip and end up with an incorrect program. 
+Functional programs are often easier to '''understand''': it is usually possible to get their meaning at a glance. The same certainly cannot be said of the C program.  It takes quite a while to understand, and even when you do understand it, it is extremely easy to make a small slip and end up with an incorrect program.
 
 Here is a detailed explanation of the Haskell quicksort:
 
 <haskell>
 quicksort []     = []
 </haskell>
-The first clause reads: "The result of sorting an empty list (<tt>[]</tt>) is just an empty list (<tt>[]</tt>)".  
+The first clause reads: "The result of sorting an empty list (<tt>[]</tt>) is just an empty list (<tt>[]</tt>)".
 
 <haskell>
 quicksort (p:xs) = (quicksort lesser) ++ [p] ++ (quicksort greater)
@@ -202,7 +202,7 @@ The second clause reads: "The result of sorting a non-empty list whose first ele
 the rest of which will be referred to as <tt>xs</tt>, is a result of concatenating three sublists: first the result of sorting the elements of <tt>xs</tt> that are less than <tt>p</tt>, then <tt>p</tt> itself, and then the result of sorting the elements of <tt>xs</tt> that are greater than or equal to <tt>p</tt>."
 
 ===Brevity===
-Functional programs tend to be much more '''concise''', shorter by a factor of two to ten usually, than their imperative counterparts.  
+Functional programs tend to be much more '''concise''', shorter by a factor of two to ten usually, than their imperative counterparts.
 
 The above could be written even more concisely with the help of [[list comprehension]]s:
 <haskell>
@@ -235,7 +235,7 @@ grep printf Foo.c | wc
 </pre>
 counts the number of lines in the file <tt> Foo.c </tt>that include the
 string <tt>printf</tt>.
-The command 
+The command
 <pre>
 grep printf Foo.c
 </pre>
@@ -274,7 +274,7 @@ an object whose internal workings are hidden; a C procedure, for
 example, is an abstraction.  Abstractions are ''the'' key to
 building modular, maintainable programs, so much so that a good
 question to ask of any new language is "what mechanisms for
-abstraction does it provide?". 
+abstraction does it provide?".
 
 One powerful abstraction mechanism available in functional languages
 is the '''[[higher order function]]'''.  In Haskell a function is a
@@ -295,7 +295,7 @@ ingenious technique, invented by Hoare, whereby it sorts the array
 ''in place''; that is, without using any extra storage.  As a
 result, it runs quickly, and in a small amount of memory.  In
 contrast, the Haskell program allocates quite a lot of extra memory
-behind the scenes, and runs rather slower than the C program. 
+behind the scenes, and runs rather slower than the C program.
 
 In effect, the C quicksort does some very ingenious storage
 management, trading this algorithmic complexity for a reduction in
@@ -395,7 +395,7 @@ that they can "pick it up on the day".
 <blockquote>They used to be, perhaps 20 years ago. But the compilers
 have long since caught up. Haskell programs run fast for all but the
 most performance-demanding applications. At the time of writing, Haskell
-compiled via GHC is in 2nd place (behind C) in the 
+compiled via GHC is in 2nd place (behind C) in the
 [http://shootout.alioth.debian.org/gp4/benchmark.php?test=all&lang=all Great Language Shootout],
 with other functional languages also ranked highly.
 </blockquote>
@@ -405,13 +405,13 @@ Also worded as: ''Can I benefit from functional programming without rewriting my
 <blockquote>
 
 Haskell has been successfully integrated into existing applications in
-a number of ways. 
+a number of ways.
 [http://www.haskell.org/hdirect/ HaskellDirect] is
 an IDL (Interface Description Language) based tool that allows Haskell
 programs to work with software components.  Low level C/C++ interfaces
 can be generated with
-[http://hackage.haskell.org/package/greencard Green Card] or 
-[http://www.cse.unsw.edu.au/~chak/haskell/c2hs/ C->Haskell], allowing 
+[http://hackage.haskell.org/package/greencard Green Card] or
+[http://www.cse.unsw.edu.au/~chak/haskell/c2hs/ C->Haskell], allowing
 tight integration between Haskell and C.  These tools have been used
 to build a large number of successful, mixed language systems.
 </blockquote>
@@ -455,7 +455,7 @@ Whilst that is still an option, there is now a
 
 These companies and individuals tend to work closely with those
 developing Haskell (indeed, they have usually made major
-contributions to Haskell themselves).  
+contributions to Haskell themselves).
 
 </blockquote>
 ===''How can I learn Haskell?''===
@@ -469,3 +469,4 @@ The easiest way to learn Haskell is with a [[Books|textbook]]. There are a lot o
 </blockquote>
 
 ''Based on a paper by Simon Peyton Jones.''
+

@@ -58,12 +58,13 @@ public class Utility {
             cmds.add( "--variable=rootdir:"+resolveToRoot(outputPath, Bundle.dstDir) );
             cmds.add( "--variable=md2htmldir:"+Bundle.resourceDirName );
             cmds.add( "--variable=thispath:"+pathBasedOnRoot );
-            cmds.add( "--template="+Bundle.htmltemplatePath );
             if (Bundle.mdExts.contains(suffix.toLowerCase())) {
+                cmds.add( "--template="+Bundle.htmltemplatePath );
                 cmds.add( "--from=markdown+abbreviations+east_asian_line_breaks+emoji" );
                 cmds.add( outputPath );
                 cmds.add( Bundle.dotmd2htmlymlPath );
             } else {
+                cmds.add( "--template="+Bundle.htmltemplatePath+"_" );
                 cmds.add( outputPath );
             }
             cmds.add( "--output="+outputPathHTML );

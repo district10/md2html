@@ -5,7 +5,8 @@ target/md2html.jar: $(wildcard src/main/java/com/tangzhixiong/md2html/*.java)
 clean:
 	rm -rf publish/ target/
 test: publish/md2html.jar
-	java -jar $< -i src/test/input -o publish
+	make -C src/test
+	java -jar $< -i src/test/output -o publish -f
 publish/%: target/%
 	mkdir -p $(@D)
 	cp $< $@

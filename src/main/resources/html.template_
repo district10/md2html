@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="district10" />
+    <meta name="generator" content="md2html" />
+    <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
+    <link rel="stylesheet" href="$rootdir$$md2htmldir$/main.css" type="text/css" />
+$if(math)$
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+$endif$
+</head>
+<body id ="md2htmlBody" class="markdown-body">
+$body$
+<input id="indexButton" type="Button" onclick="loadIndex()">
+<script>
+var metaJson = $meta-json$;
+var pagetitle = "$if(pagetitle)$$pagetitle$$else$$endif$";
+</script>
+<script src="$rootdir$$md2htmldir$/lazyload.min.js"></script>
+<script src="$rootdir$$md2htmldir$/jquery-3.0.0.min.js"></script>
+<script src="$rootdir$$md2htmldir$/clipboard.min.js"></script>
+<script src="$rootdir$$md2htmldir$/main.js"></script>
+</body>
+</html>
