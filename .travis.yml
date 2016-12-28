@@ -15,5 +15,4 @@ script:
   - mkdir publish
   - mvn -v
   - mvn package && cp target/md2html.jar publish/
-  - # java -jar publish/md2html.jar -i demo -o publish
-  - cat conf.json.in | sed -e "s/QiNiuAK/$QiNiuAK/" | sed -e "s/QiNiuSK/$QiNiuSK/" > conf.json && qrsync conf.json
+  - java -jar publish/md2html.jar -i demo -o publish && cat conf.json.in | sed -e "s/QiNiuAK/$QiNiuAK/" | sed -e "s/QiNiuSK/$QiNiuSK/" > conf.json && qrsync conf.json
