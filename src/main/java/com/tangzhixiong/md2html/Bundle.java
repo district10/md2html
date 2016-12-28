@@ -35,6 +35,7 @@ public class Bundle {
     static {
         for (String s : mdExtsString) {
             mdExts.add(s.toLowerCase());
+            markupExts.add(s.toLowerCase());
         }
         for (String s : markupExtsString) {
             markupExts.add(s.toLowerCase());

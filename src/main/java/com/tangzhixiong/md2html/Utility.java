@@ -90,7 +90,8 @@ public class Utility {
             mkdirHyphenPDollarAtD(outputFile);
             try {
                 // expand markdown file
-                boolean isMarkupFile = Bundle.markupExts.contains(inputPath.substring(inputPath.lastIndexOf(".")+1));
+                String ext = inputPath.substring(inputPath.lastIndexOf(".")+1);
+                boolean isMarkupFile = Bundle.markupExts.contains(ext);
                 if (isMarkupFile) {
                     // src/dir/file.md -> dst/dir/file.md
                     if (!Config.expandMarkdown) {
