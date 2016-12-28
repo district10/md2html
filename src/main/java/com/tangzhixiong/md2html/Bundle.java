@@ -54,8 +54,6 @@ public class Bundle {
     public static final String htmltemplateRes = "html.template";
     public static final String[] resources = {
             md2htmlymlRes,
-            "cat.pl",
-            "drawer.pl",
             htmltemplateRes,
             "jquery-3.0.0.min.js",
             "lazyload.min.js",
