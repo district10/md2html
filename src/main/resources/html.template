@@ -22,6 +22,7 @@ var pagetitle = "$if(pagetitle)$$pagetitle$$else$$endif$";
 </script>
 <script src="$rootdir$$md2htmldir$lazyload.min.js"></script>
 <script src="$rootdir$$md2htmldir$jquery-3.0.0.min.js"></script>
+<script src="$rootdir$$md2htmldir$clipboard.min.js"></script>
 <script src="$rootdir$$md2htmldir$main.js"></script>
 </body>
 </html>

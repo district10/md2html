@@ -2,6 +2,13 @@ $( "a[href^='http://']" ).attr( "target", "_blank" );
 $( "a[href^='https://']" ).attr( "target", "_blank" );
 $( "a[href^='#']" ).attr( "target", "" );
 $( "a" ).on('click', function(event){ event.stopPropagation(); });
+$("a").each(function(index){
+    var href = $(this).attr('href');
+    if( href.endsWith('.md') ) {
+        var newhref = href.substr(0, href.length-3) + '.html';
+        $(this).attr({ 'href': newhref });
+    }
+});
 
 $('img').each(function(index){
     var src = $(this).attr('src');
@@ -12,13 +19,33 @@ $('img').each(function(index){
     });
 });
 
-$('a').each(function(index){
-    var href = $(this).attr('href');
-    if( href.endsWith('.md') ) {
-        var newhref = href.substr(0, href.length-3) + '.html';
-        $(this).attr({ 'href': newhref });
+$("code").each(function () {
+    var text = $(this).text();
+    if ($(this).parent().is("pre")) {
+        var $btn = $('<button class="copy-next">Copy</button>');
+        $btn.attr({
+            "data-clipboard-text": text
+        });
+        $btn.prependTo($(this).parent());
+    } else {
+        $(this).attr({
+            "data-clipboard-text": text
+        }).addClass("copy-me");
     }
 });
+var clipboard = new Clipboard(".copy-me, .copy-next");
+/*
+clipboard.on('success', function(e) {
+    console.info('Action:', e.action);
+    console.info('Text:', e.text);
+    console.info('Trigger:', e.trigger);
+    e.clearSelection();
+});
+clipboard.on('error', function(e) {
+    console.error('Action:', e.action);
+    console.error('Trigger:', e.trigger);
+});
+*/
 
 $('dt > code.fold').each(function(){
     $(this)

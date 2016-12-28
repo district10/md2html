@@ -1,5 +1,7 @@
 # md2html
 
+[![Build Status](https://travis-ci.org/district10/md2html.svg?branch=master)](https://travis-ci.org/district10/md2html)
+
 把文件夹下的 Markdown 文件，转化成 GitHub 风格的 HTML。
 
 （代码高亮用了个人比较喜欢的 Pygments 风格。）
@@ -19,7 +21,7 @@ Pandoc 是内部用来转化 Markdown 的工具，下载地址：
 比如 @judasn 的 [judasn/IntelliJ-IDEA-Tutorial: IntelliJ IDEA 简体中文专题教程](https://github.com/judasn/IntelliJ-IDEA-Tutorial)。
 首先下载它的源码，解压后进入文件夹 `IntelliJ-IDEA-Tutorial`。
 
-下载 [`md2html.jar`](https://github.com/district10/md2html/releases)，然后把 `jar` 文件放到根目录，
+到 [Releases](https://github.com/district10/md2html/releases) 下载 md2html.jar（或者下载 [Nighty build](http://whudoc.qiniudn.com/res/2017/md2html.jar)），然后把 `jar` 文件放到根目录，
 然后运行 `java -jar md2html.jar`（或者双击它），就有
 `../IntelliJ-IDEA-Tutorial-master-publish` 文件夹。打开里面的 `README.html`（或者 `index.html`） 看效果。
 
@@ -92,6 +94,10 @@ More Usage Examples
 参考：
 
 -   [utf 8 - Setting the default Java character encoding? - Stack Overflow](http://stackoverflow.com/questions/361975/setting-the-default-java-character-encoding)
+
+## Tips
+
+Clip on `<code>...</code>` to copy it to your clipboard.
 
 ## TODO
 

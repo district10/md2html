@@ -58,6 +58,7 @@ public class Bundle {
             htmltemplateRes,
             "jquery-3.0.0.min.js",
             "lazyload.min.js",
+            "clipboard.min.js",
             "main.css",
             "main.js",
             "README.txt",
@@ -69,11 +70,6 @@ public class Bundle {
     public static void fillBundle(String srcDirPath, String dstDirPath) throws Exception {
         srcDir = srcDirPath;
         dstDir = dstDirPath;
-        if (dstDir.startsWith(srcDir+File.separator)) {
-            System.err.printf("input: '%s' -> output: '%s'\n", srcDir, dstDir);
-            System.err.println("Output directory is subdirectory of input directory. Exit now.");
-            System.exit(1);
-        }
         resourcePath = dstDir+File.separator+ resourceDirName;
         htmltemplatePath = resourcePath+File.separator+htmltemplateRes;
         dotmd2htmlymlPath = resourcePath+File.separator+md2htmlymlRes;
@@ -94,6 +90,7 @@ public class Bundle {
         src2dst.clear();
         key2dir.clear();
 
+        boolean stillInBasedir = true;
         final ArrayDeque<File> queue = new ArrayDeque<>();
         queue.add(new File(srcDirPath));
         while (!queue.isEmpty()) {
@@ -116,16 +113,21 @@ public class Bundle {
             catch (NullPointerException e) { continue; }
             if (entries == null) { continue; }
             for (final File entry: entries) {
+                final String entryCanoPath = entry.getCanonicalPath();
+                final String entryBasename = entry.getName();
                 if (entry.isFile()) {
-                    final String src = entry.getCanonicalPath();
-                    src2dst.put(src, dstDir + File.separator + src.substring(srcDir.length()+1));
+                    src2dst.put(entryCanoPath, dstDir + File.separator + entryCanoPath.substring(srcDir.length()+1));
                 } else if (entry.isDirectory()) {
-                    final String basename = entry.getName();
-                    if (!basename.startsWith(".")) {
+                    if (stillInBasedir && entryBasename.equals(resourceDirName)) { continue; }
+                    if (dstDir.endsWith(entryBasename) && dstDir.equals(entryCanoPath)) {
+                        continue;
+                    }
+                    if (!entryBasename.startsWith(".")) {
                         queue.add(entry);
                     }
                 }
             }
+            stillInBasedir = false;
         }
         for (String dir: key2dir.values()) {
             // TODO: if no index.html was generated, generate it!

@@ -231,3 +231,20 @@ ul.focus {
 #indexButton:hover {
   opacity: 1.0;
 }
+
+.copy-next {
+    -webkit-transition: opacity 0.3s ease-in-out;
+    -o-transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0.05;
+    padding: 2px 6px;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+}
+.copy-next:hover {
+    opacity: 1;
+}
+pre {
+     position: relative;
+}

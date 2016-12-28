@@ -1,0 +1,5 @@
+{
+    "src": "publish",
+    "dest":  "qiniu:access_key=QiNiuAK&secret_key=QiNiuSK&bucket=tangzx&key_prefix=res/2017/",
+    "debug_level": 1
+}
