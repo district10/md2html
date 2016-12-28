@@ -1,12 +1,26 @@
 package com.tangzhixiong.md2html;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class Utility {
+    public static void copyRes(String inputCanonicalPath, String outCanonicalPath) {
+        File inFile = new File(inputCanonicalPath);
+        File outFile = new File(outCanonicalPath);
+        // if (!outFile.exists()) { outFile.mkdirs(); }
+        try {
+            FileUtils.copyDirectory(inFile, outFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String resolveToRoot(String fullname, String dirname) {
         String frag = fullname.substring(dirname.length()+1);
         StringBuilder sb = new StringBuilder();
@@ -41,25 +55,32 @@ public class Utility {
             cmds.add( "pandoc" ); cmds.add( "-S" ); cmds.add( "-s" );
             cmds.add( "--ascii" );
             cmds.add( "--mathjax" );
-            cmds.add( "-V" ); cmds.add( "\"rootdir="+resolveToRoot(outputPath, Bundle.dstDir)+"\"" );
-            cmds.add( "-V" ); cmds.add( "\"md2htmldir="+Bundle.resourceDirName+"/\"");
-            cmds.add( "-V" ); cmds.add( "\"thispath="+pathBasedOnRoot+"\"" );
-            cmds.add( "--template" );
-            cmds.add( "\""+Bundle.htmltemplatePath+"\"" );
+            cmds.add( "--variable=rootdir:"+resolveToRoot(outputPath, Bundle.dstDir) );
+            cmds.add( "--variable=md2htmldir:"+Bundle.resourceDirName );
+            cmds.add( "--variable=thispath:"+pathBasedOnRoot );
+            cmds.add( "--template="+Bundle.htmltemplatePath );
             if (Bundle.mdExts.contains(suffix.toLowerCase())) {
-                cmds.add( "-f" ); cmds.add( "markdown+abbreviations+east_asian_line_breaks+emoji" );
-                cmds.add( "\""+Bundle.dotmd2htmlymlPath+"\"" );
+                cmds.add( "--from=markdown+abbreviations+east_asian_line_breaks+emoji" );
+                cmds.add( outputPath );
+                cmds.add( Bundle.dotmd2htmlymlPath );
+            } else {
+                cmds.add( outputPath );
             }
-            cmds.add( "\""+outputPath+"\"" );
-            cmds.add( "-o" );
-            cmds.add( "\""+outputPathHTML+"\"" );
+            cmds.add( "--output="+outputPathHTML );
         }
         try {
             if (!Config.silentMode) {
                 System.out.printf("[P] %s -> %s\n", outputPath, outputPathHTML);
             }
-            // Process proc = runtime.exec(cmd);
+            if (Config.verboseMode) {
+                System.out.println(cmds);
+            }
             Process p = new ProcessBuilder().inheritIO().command(cmds).start();
+            try {
+                p.waitFor(10, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         catch (IOException e) {
             e.printStackTrace();

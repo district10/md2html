@@ -8,7 +8,9 @@
     <meta name="author" content="district10" />
     <meta name="generator" content="md2html" />
     <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
-    <link rel="stylesheet" href="$rootdir$$md2htmldir$main.css" type="text/css" />
+$for(mh-css)$
+    <link rel="stylesheet" href="$rootdir$$md2htmldir$/$mh-css$" type="text/css" />
+$endfor$
 $if(math)$
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
 $endif$
@@ -20,9 +22,8 @@ $body$
 var metaJson = $meta-json$;
 var pagetitle = "$if(pagetitle)$$pagetitle$$else$$endif$";
 </script>
-<script src="$rootdir$$md2htmldir$lazyload.min.js"></script>
-<script src="$rootdir$$md2htmldir$jquery-3.0.0.min.js"></script>
-<script src="$rootdir$$md2htmldir$clipboard.min.js"></script>
-<script src="$rootdir$$md2htmldir$main.js"></script>
+$for(mh-js)$
+<script src="$rootdir$$md2htmldir$/$mh-js$"></script>
+$endfor$
 </body>
 </html>

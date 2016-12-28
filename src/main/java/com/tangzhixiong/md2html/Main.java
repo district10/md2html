@@ -15,9 +15,11 @@ class Config {
     public static boolean expandMarkdown = false;
     public static boolean generateCodeFragment = false;
     public static boolean readmeAsMainIndex = false;
+    public static boolean logCommands = false;
 
     public static String srcDirPath = null;
     public static String dstDirPath = null;
+    public static String resDirPath = null;
 }
 
 public class Main {
@@ -43,7 +45,6 @@ public class Main {
         try {
             // load commandline configs
             parseConfigs(args);
-
             // config source dir
             if (Config.srcDirPath == null) { Config.srcDirPath = "."; }
             final File srcDirFile = new File(Config.srcDirPath);
@@ -73,16 +74,10 @@ public class Main {
             // build file mapping strategy
             Bundle.fillBundle(Config.srcDirPath, Config.dstDirPath);
 
-            // copy configs, if there is a '.md2html.yml' in srcDirPath
-            Utility.mappingFile(
-                    Bundle.srcDir+File.separator+Bundle.md2htmlymlRes,
-                    Bundle.dstDir+File.separator+Bundle.md2htmlymlRes);
-
             // extract necessary static resources
             for (String resourcePath: Bundle.resources) {
                 Utility.extractResourceFile("/"+resourcePath, Bundle.resourcePath+File.separator+resourcePath);
             }
-
             // merge configs
             ArrayList<String> partAll = new ArrayList<>();
             {
@@ -96,15 +91,24 @@ public class Main {
             {
                 // add your config and global config
                 partAll.addAll(Utility.getLinesNaive(Bundle.dotmd2htmlymlPath));
+                {
+                    // copy configs, if there is a '.md2html.yml' in srcDirPath
+                    Utility.mappingFile(
+                            Bundle.srcDir+File.separator+Bundle.md2htmlymlRes,
+                            Bundle.dstDir+File.separator+Bundle.md2htmlymlRes);
+                }
                 partAll.addAll(Utility.getLinesNaive(Bundle.dstDir+File.separator+Bundle.md2htmlymlRes));
-            }
-            {
                 // add config block lines
                 partAll.add(0, "---");
                 partAll.add("---");
             }
             // write merged configs out
             Utility.dump(partAll, new File(Bundle.dotmd2htmlymlPath));
+
+            // load your res files
+            if (Config.resDirPath != null) {
+                Utility.copyRes(Config.resDirPath, Bundle.resourcePath);
+            }
 
             // index.html <--- index.md / README.md
             String indexMdSrc = Config.srcDirPath+File.separator+"index.md";
@@ -222,6 +226,8 @@ public class Main {
                 if (++i < args.length) { Config.srcDirPath = args[i]; }
             } else if (args[i].equals("-o") || args[i].equals("-output")) {
                 if (++i < args.length) { Config.dstDirPath = args[i]; }
+            } else if (args[i].equals("-r") || args[i].equals("-res")) {
+                if (++i < args.length) { Config.resDirPath = args[i]; }
             } else if (args[i].equals("-w") || args[i].equals("-watch")) {
                 Config.watchMode = true;
             } else if (args[i].equals("-s") || args[i].equals("-silent")) {

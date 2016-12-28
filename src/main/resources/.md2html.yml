@@ -1,2 +1,7 @@
-generator: pandoc+md2html
-highlighting: "(java|.java),(cpp|.cpp,.c,.cc,.h,.hpp),(python|py),(perl|pl),(javascript|.js),(json|.json),(css|.css),(makefile|.mk),(yaml|.yml,.yaml)"
+mh-css:
+  - main.css
+mh-js:
+  - lazyload.min.js
+  - jquery-3.0.0.min.js
+  - clipboard.min.js
+  - main.js

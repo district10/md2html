@@ -9,30 +9,25 @@ import java.nio.file.WatchService;
 import java.util.*;
 
 public class Bundle {
-    public static String[] mdExtsString = {
-            "Rmd",
-            "markdown",
-            "md",
-            "mdown",
-            "mdwn",
-            "mkd",
-            "mkdn",
-    };
-    public static String[] markupExtsString = {
-            "org",
-            "rst",
-            "asc",
-            "asciidoc",
-            "tex",
-            "texi",
-            "textile",
-            "wiki",
-            "docx",
-            "epub",
-    };
     public static HashSet<String> mdExts = new HashSet<>();
     public static HashSet<String> markupExts = new HashSet<>();
     static {
+        String[] mdExtsString = {
+                "Rmd",
+                "markdown", "md",
+                "mdown", "mdwn", "mkd", "mkdn",
+        };
+        String[] markupExtsString = {
+                "asc", "asciidoc",
+                "docx",
+                "epub",
+                "org",
+                "rst",
+                "tex",
+                "texi",
+                "textile",
+                "wiki",
+        };
         for (String s : mdExtsString) {
             mdExts.add(s.toLowerCase());
             markupExts.add(s.toLowerCase());
