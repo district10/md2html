@@ -2,6 +2,8 @@
 
 Fork me on GitHub: [district10/md2html: 把文件夹下的 Markdown 文件，转化成 GitHub 风格的 HTML](https://github.com/district10/md2html)。
 
+下载 [Nighty build](md2html.jar)。
+
 -   [code1.cpp](code1.cpp)
 -   [code2.h](code2.h)
 -   [configs.org](configs.org)

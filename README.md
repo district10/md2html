@@ -21,7 +21,7 @@ Pandoc 是内部用来转化 Markdown 的工具，下载地址：
 比如 @judasn 的 [judasn/IntelliJ-IDEA-Tutorial: IntelliJ IDEA 简体中文专题教程](https://github.com/judasn/IntelliJ-IDEA-Tutorial)。
 首先下载它的源码，解压后进入文件夹 `IntelliJ-IDEA-Tutorial`。
 
-到 [Releases](https://github.com/district10/md2html/releases) 下载 md2html.jar（或者下载 [Nighty build](http://whudoc.qiniudn.com/res/2017/md2html.jar)），然后把 `jar` 文件放到根目录，
+到 [Releases](https://github.com/district10/md2html/releases) 下载 md2html.jar（或者下载 [Nighty build](http://whudoc.qiniudn.com/java/md2html/md2html.jar)），然后把 `jar` 文件放到根目录，
 然后运行 `java -jar md2html.jar`（或者双击它），就有
 `../IntelliJ-IDEA-Tutorial-master-publish` 文件夹。打开里面的 `README.html`（或者 `index.html`） 看效果。
 
