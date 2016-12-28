@@ -8,3 +8,4 @@ publish/*
 /target/
 /.idea
 /md2html.iml
+/conf.json

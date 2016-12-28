@@ -1,18 +1,16 @@
-sudo: true
 language: java
 jdk:
   - oraclejdk8
 before_install:
   - export PATH="/tmp/bin:$HOME/bin:$PATH"
+  - export PANDOC_URL="https://github.com/jgm/pandoc/releases/download/1.19.1/pandoc-1.19.1-1-amd64.deb"
+  - export QRSYNC_URL="https://github.com/whudoc/statics/raw/master/linuxbin/qrsync"
 install:
   - mkdir -p /tmp/bin && cd /tmp/bin
-  - wget https://github.com/whudoc/statics/raw/master/linuxbin/qrsync
-  - chmod +x qrsync
-  - wget https://github.com/jgm/pandoc/releases/download/1.17/pandoc-1.17-1-amd64.deb
-  - sudo dpkg -i pandoc*.deb
-  - cd ~/build/district10/md2html;
+  - wget $QRSYNC_URL && chmod +x qrsync
+  - wget $PANDOC_URL && ar p pandoc*.deb data.tar.gz | tar xvz --strip-components 2 -C ./
 script:
-  - mkdir publish
+  - cd ~/build/district10/md2html;
   - mvn -v
-  - mvn package && cp target/md2html.jar publish/
-  - java -jar publish/md2html.jar -i demo -o publish && cat conf.json.in | sed -e "s/QiNiuAK/$QiNiuAK/" | sed -e "s/QiNiuSK/$QiNiuSK/" > conf.json && qrsync conf.json
+  - make
+  - make test && qrsync <(cat conf.json.in | sed -e "s/QiNiuAK/$QiNiuAK/" | sed -e "s/QiNiuSK/$QiNiuSK/")
