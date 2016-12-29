@@ -14,4 +14,4 @@ script:
   - cd ~/build/district10/md2html;
   - mvn -v
   - make
-  - make test && qrsync <(cat conf.json.in | sed -e "s/QiNiuAK/$QiNiuAK/" | sed -e "s/QiNiuSK/$QiNiuSK/")
+  - make test test1 test2 && qrsync <(cat conf.json.in | sed -e "s/QiNiuAK/$QiNiuAK/" | sed -e "s/QiNiuSK/$QiNiuSK/")
