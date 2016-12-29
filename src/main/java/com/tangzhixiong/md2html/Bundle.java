@@ -11,6 +11,8 @@ import java.util.*;
 public class Bundle {
     public static HashSet<String> mdExts = new HashSet<>();
     public static HashSet<String> markupExts = new HashSet<>();
+    public static HashMap<String, String> aliasMaps = new HashMap<>();
+
     static {
         String[] mdExtsString = {
                 "Rmd",
@@ -35,6 +37,13 @@ public class Bundle {
         for (String s : markupExtsString) {
             markupExts.add(s.toLowerCase());
         }
+        aliasMaps.put("raw-head", "mh-head-head");
+        aliasMaps.put("remote-css", "mh-css-after-cdn ");
+        aliasMaps.put("local-css", "mh-css-after ");
+        aliasMaps.put("raw-css", "mh-css-raw ");
+        aliasMaps.put("remote-js", "mh-js-after-cdn ");
+        aliasMaps.put("local-js", "mh-js-after ");
+        aliasMaps.put("raw-js", "mh-js-raw ");
     };
 
     public static String srcDir;
@@ -50,7 +59,6 @@ public class Bundle {
     public static final String[] resources = {
             md2htmlymlRes,
             htmltemplateRes,
-            htmltemplateRes+"_",
             "jquery-3.0.0.min.js",
             "lazyload.min.js",
             "clipboard.min.js",

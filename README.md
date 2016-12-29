@@ -99,6 +99,60 @@ More Usage Examples
 
 Clip on `<code>...</code>` to copy it to your clipboard.
 
+位置标记：
+
+```html
+<head>
+    $mh-head-head                               (raw html fragment)         alias: raw-head
+
+             +----- $mh-css-before-cdn          (remote css url)
+            /
+           +------- $mh-css-before              (local css path)
+          /
+    CSS -+--------- $mh-css                     (local css path)
+          \
+           `+------ $mh-css-after-cdn           (remote css url)            alias: remote-css
+             \
+              `+--- $mh-css-after               (local css path)            alias: local-css
+                \
+                 `- $mh-css-raw                 (raw css fragment)          alias: raw-css
+
+    $mh-head-tail
+</head>
+
+<body>
+    $mh-nav                                     (Use 'mh-nav: false to dismiss')
+              +---- $body-before                (raw html fragment)
+             /
+    $body --+
+             `----- $body-after                 (raw html fragment)
+
+              +---- $mh-info                    (Use 'mh-info: false' to dismiss)
+             /
+            +------ $mh-js-before-cdn           (remote js url)
+           /
+          +-------- $mh-js-before               (local js file path)
+         /
+    JS -+---------- $mh-js                      (local js file path)
+         \
+          `+------- $mh-js-after-cdn            (remote js url)             alias: remote-js
+            \
+             `----- $mh-js-after                (local js file path)        alias: local-js
+               \
+                `-- $mh-js-raw                  (raw js fragment)           alias: raw-js
+
+    $mh-body-tail                               (raw html fragment)
+</body>
+```
+
+in your `.md2html.yml`
+
+```
+mh-css:
+  - a.js
+  - b.js
+```
+
 ## TODO
 
 更多的 options：

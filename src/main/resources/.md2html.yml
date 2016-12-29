@@ -1,3 +1,5 @@
+mh-info: true
+mh-nav: true
 mh-css:
   - main.css
 mh-js:
@@ -5,3 +7,5 @@ mh-js:
   - jquery-3.0.0.min.js
   - clipboard.min.js
   - main.js
+generator: pandoc+md2html.jar
+#absolute-rootdir-url: http://tangzhixiong.com/md2html

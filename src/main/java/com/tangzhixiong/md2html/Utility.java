@@ -1,7 +1,5 @@
 package com.tangzhixiong.md2html;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -10,14 +8,28 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Utility {
-    public static void copyRes(String inputCanonicalPath, String outCanonicalPath) {
-        File inFile = new File(inputCanonicalPath);
-        File outFile = new File(outCanonicalPath);
-        // if (!outFile.exists()) { outFile.mkdirs(); }
-        try {
-            FileUtils.copyDirectory(inFile, outFile);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void copyRes(String srcDirPath, String dstDirPath) {
+        final ArrayDeque<File> queue = new ArrayDeque<>();
+        queue.add(new File(srcDirPath));
+        while (!queue.isEmpty()) {
+            File pwd = queue.poll();
+            final File[] entries;
+            try {
+                entries = pwd.listFiles();
+            } catch (NullPointerException e) { continue; }
+            for (final File entry: entries) {
+                if (entry.isFile()) {
+                    try {
+                        final String srcFilePath = entry.getCanonicalPath();
+                        final String dstFilePath = srcFilePath.replaceFirst(srcDirPath, dstDirPath);
+                        mappingFile(srcFilePath, dstFilePath, !Config.silentMode);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else if (entry.isDirectory()) {
+                    queue.add(entry);
+                }
+            }
         }
     }
 
@@ -59,12 +71,14 @@ public class Utility {
             cmds.add( "--variable=md2htmldir:"+Bundle.resourceDirName );
             cmds.add( "--variable=thispath:"+pathBasedOnRoot );
             if (Bundle.mdExts.contains(suffix.toLowerCase())) {
+                cmds.add( "--variable=ismarkdown:true" );
                 cmds.add( "--template="+Bundle.htmltemplatePath );
                 cmds.add( "--from=markdown+abbreviations+east_asian_line_breaks+emoji" );
                 cmds.add( outputPath );
                 cmds.add( Bundle.dotmd2htmlymlPath );
             } else {
-                cmds.add( "--template="+Bundle.htmltemplatePath+"_" );
+                cmds.add( "--variable=ismarkdown:false" );
+                cmds.add( "--template="+Bundle.htmltemplatePath );
                 cmds.add( outputPath );
             }
             cmds.add( "--output="+outputPathHTML );
@@ -112,11 +126,11 @@ public class Utility {
             mkdirHyphenPDollarAtD(outputFile);
             try {
                 // expand markdown file
-                String ext = inputPath.substring(inputPath.lastIndexOf(".")+1);
-                boolean isMarkupFile = Bundle.markupExts.contains(ext);
-                if (isMarkupFile) {
+                boolean isMdFile = isMarkdownFile(inputPath);
+                if (isMdFile) {
                     // src/dir/file.md -> dst/dir/file.md
                     if (!Config.expandMarkdown) {
+                        System.out.println(Config.expandMarkdown);
                         if (writeLog) {
                             System.out.printf("[C] %s -> %s\n", inputPath, outputPath);
                         }
@@ -125,11 +139,12 @@ public class Utility {
                                 , StandardCopyOption.COPY_ATTRIBUTES);
                     } else {
                         InclusionParams params = new InclusionParams();
-                        List<String> lines = expandLines(inputPath, params);
+                        String filename = inputFile.getCanonicalPath();
+                        List<String> lines = expandLines(filename, params, isMdFile);
                         if (writeLog) {
                             System.out.printf("[E] %s -> %s\n", inputPath, outputPath);
                         }
-                        dump(lines, outputFile, isMarkupFile);
+                        dump(lines, outputFile, isMdFile);
                     }
                     // TODO: update entry in search.xml
                     // dst/dir/file.md -> dst/dir/file.html
@@ -290,26 +305,13 @@ public class Utility {
     }
 
     public static boolean canExpandLine(String line, InclusionParams params) {
-        if (!line.endsWith(InclusionParams.right)) {
-            return false;
-        }
-        int i = 0, len = line.length();
-        while (i < len && line.charAt(i) == ' ') {
-            ++i;
-        }
-        if (i >= len) { return false; }
-        params.leftSpace = i;
-        String include = line.substring(i);
-        if (!include.startsWith(InclusionParams.flag)) {
-            return false;
-        }
-        i = include.indexOf(InclusionParams.left);
-        if (i == len-1) {
-            return false;
-        }
-        params.pad = include.substring(InclusionParams.flaglen, i);
-        params.path = include.substring(i+1, include.length()-1);
-        if (params.path.isEmpty()) {
+        if (!line.endsWith("=")) { return false; }
+        int idx = line.indexOf("@include <-=");
+        if (idx < 0) { return false; }
+        try {
+            params.pad = line.substring(0, idx);
+            params.path = line.substring(idx+"@include <-=".length(), line.length()-1);
+        } catch (Exception e) {
             return false;
         }
         return true;
@@ -318,8 +320,7 @@ public class Utility {
     public static List<String> getLinesNaive(String inputPath) {
         try {
             return Files.readAllLines(new File(inputPath).toPath(), Charset.defaultCharset() ); // UTF-8
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             try (
                     BufferedReader reader = new BufferedReader(new FileReader(new File(inputPath)));
             ) {
@@ -328,40 +329,52 @@ public class Utility {
                 while((line = reader.readLine()) != null) {
                     lines.add(line);
                 }
-                reader.close();
                 return lines;
-            }
-            catch (IOException ioe) {
+            } catch (IOException ioe) {
             }
         }
         return new ArrayList<String>();
     }
 
+    public static String getExt(String path) {
+        int idx = path.lastIndexOf(".");
+        if (idx >=0) {
+            return path.substring(idx+1);
+        }
+        return "";
+    }
+
+    public static boolean isMarkdownFile(String path) {
+        return Bundle.markupExts.contains(getExt(path));
+    }
+
     public static List<String> expandLines(String inputPath) {
         if (Config.expandMarkdown) {
-            return expandLines(inputPath, new InclusionParams());
+            String ext = getExt(inputPath);
+            return expandLines(inputPath, new InclusionParams(), Bundle.markupExts.contains(ext));
         } else {
             return getLinesNaive(inputPath);
         }
     }
 
     // inputPath is a CanonicalPath, params is for INPUT
-    public static List<String> expandLines(String inputPath, InclusionParams params) {
-        boolean isMarkdownFile = inputPath.endsWith(".md");
-        if (!isMarkdownFile) {
+    public static List<String> expandLines(String inputPath, InclusionParams params, boolean needExpansion) {
+        if (!needExpansion) {
             return getLinesNaive(inputPath);
         }
         ArrayList<String> lines = new ArrayList<>();
-        int cut = inputPath.lastIndexOf(File.separator);
-        if (cut < 0) {
+        File file = new File(inputPath);
+        if (!file.isFile() || !file.canRead()) { return lines; }
+        String filename = null;
+        String basename = null;
+        try {
+            filename = file.getCanonicalPath();
+            basename = file.getParentFile().getCanonicalPath();
+        } catch (Exception e) {
+            e.printStackTrace();
             return lines;
         }
-        String inputPathDirname = inputPath.substring(0, cut);
-        File inputFile = new File(inputPath);
-        if (!inputFile.isFile() || !inputFile.canRead()) {
-            return lines;
-        }
-        if (params.parents.contains(inputPath)) {
+        if (params.parents.contains(filename)) {
             System.err.printf("Loop detected, %s will not be included.\n", inputPath);
             StringBuilder sb = new StringBuilder();
             sb.append("\n```\nLOOP->-[");
@@ -376,22 +389,20 @@ public class Utility {
             return lines;
         }
         try (
-                Scanner scanner = new Scanner(inputFile);
+                Scanner scanner = new Scanner(file);
         ) {
-            params.parents.add(inputPath);
+            params.parents.add(filename);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 InclusionParams paramsAnother = new InclusionParams();
                 if (canExpandLine(line, paramsAnother)) {
-                    String includePathAnother = inputPathDirname+File.separator+paramsAnother.path;
+                    String otherfilepath = basename+File.separator+paramsAnother.path;
                     try {
-                        includePathAnother = new File(includePathAnother).getCanonicalPath();
-                        int leftSpace  = paramsAnother.leftSpace;
-                        String pad = paramsAnother.pad;
-                        List<String> moreLines = expandLines(includePathAnother, params);
+                        otherfilepath = new File(otherfilepath).getCanonicalPath();
+                        List<String> moreLines = expandLines(otherfilepath, params, isMarkdownFile(otherfilepath));
                         if (moreLines != null && moreLines.size() > 0) {
                             for (String ml: moreLines) {
-                                lines.add(InclusionParams.spaces[leftSpace]+pad+ml);
+                                lines.add(params.pad + paramsAnother.pad + ml);
                             }
                         }
                     }
@@ -476,13 +487,6 @@ public class Utility {
         if (files.isEmpty()) {
             return lines;
         }
-        /*
-         *  -   "Makefile"
-         *  -   "README.md"
-         *  -   "demo\"
-         *  -   "demo\code1.cpp"
-         *  -   "demo\code2.h"
-        */
         for (int i = 1; i < files.size(); ++i) {
             lines.add(files.elementAt(i).substring(1+Bundle.srcDir.length()));
         }
@@ -491,23 +495,7 @@ public class Utility {
 }
 
 class InclusionParams {
-    public final static String left = "=";
-    public final static String right = "=";
-    public final static int maxNumOfSpaces = 50;
-    public final static String[] spaces = new String[maxNumOfSpaces];
-    public final static String flag = "@include <-";
-    public final static Integer flaglen;
-    static {
-        spaces[0]  = "";
-        for (int i = 1; i < maxNumOfSpaces; ++i) {
-            char[] chars = new char[i];
-            Arrays.fill(chars, ' ');
-            spaces[i]  = new String(chars);
-        }
-        flaglen = flag.length();
-    }
-
-    public int leftSpace;
+    public final static String flag = "@include <-=";
     public String pad;
     public String path;
     public LinkedHashSet<String> parents;

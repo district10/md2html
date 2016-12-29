@@ -29,3 +29,26 @@ Definition Term | 定义 +<
     ```cpp
     printf( "hello," " world\n" );
     ```
+
+Include file:
+
+.md2html.yml
+
+```yml
+@include <-=.md2html.yml=
+```
+
+formats/index.md
+
+```
+@include <-=formats/index.md=
+```
+
+## recursive include
+
+@include <-=include/index.md=
+
+## config
+
+-   [conf1](conf1/index.html)
+-   [conf2](conf2/index.html)

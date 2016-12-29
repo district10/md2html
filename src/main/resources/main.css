@@ -220,7 +220,7 @@ ul.focus {
     display: none;
 }
 
-#indexButton {
+#nav-btn {
     width: 3em;
     height: 3em;
     opacity: 0.4;
@@ -228,7 +228,7 @@ ul.focus {
     top: 1em;
     right: 1em;
 }
-#indexButton:hover {
+#nav-btn:hover {
   opacity: 1.0;
 }
 

@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 class Config {
     public static boolean watchMode = false;
@@ -20,14 +21,18 @@ class Config {
     public static String srcDirPath = null;
     public static String dstDirPath = null;
     public static String resDirPath = null;
+    public static String configYaml = null;
 }
 
 public class Main {
     public static void main(String[] args) {
         try {
-            Process p = new ProcessBuilder().inheritIO().command(new String[]{"pandoc", "-v"}).start();
+            System.out.print("[L] Checking pandoc...");
+            Process p = new ProcessBuilder().command(new String[]{"pandoc", "-v"}).start();
+            p.waitFor(1, TimeUnit.SECONDS);
+            System.out.print(" done. [Pandoc Installed]\n");
         } catch (Exception e) {
-            System.out.println("[X] Missing pandoc, go download: http://pandoc.org/");
+            System.out.println("[X] Missing pandoc, go download at: \"http://pandoc.org/\"");
             System.exit(0);
         }
 
@@ -40,11 +45,12 @@ public class Main {
         }
         catch (Exception e) {
             System.err.println("Tip: You need to explicit specify JVM encoding to UTF-8, like: "+
-                    "'java -jar md2html -Dfile.encoding=utf-8'.");
+                    "'java -jar md2html.jar -Dfile.encoding=utf-8'.");
         }
         try {
             // load commandline configs
             parseConfigs(args);
+
             // config source dir
             if (Config.srcDirPath == null) { Config.srcDirPath = "."; }
             final File srcDirFile = new File(Config.srcDirPath);
@@ -52,6 +58,7 @@ public class Main {
                 System.err.println("Invalid input directory: "+Config.srcDirPath);
                 System.exit(1);
             }
+
             // TODO: if git repo, grab upstream info
 
             // config destination dir
@@ -91,25 +98,42 @@ public class Main {
             {
                 // add your config and global config
                 partAll.addAll(Utility.getLinesNaive(Bundle.dotmd2htmlymlPath));
-                {
-                    // copy configs, if there is a '.md2html.yml' in srcDirPath
-                    Utility.mappingFile(
-                            Bundle.srcDir+File.separator+Bundle.md2htmlymlRes,
-                            Bundle.dstDir+File.separator+Bundle.md2htmlymlRes);
+                if (Config.configYaml != null) {
+                    partAll.addAll(Utility.getLinesNaive(Config.configYaml));
                 }
-                partAll.addAll(Utility.getLinesNaive(Bundle.dstDir+File.separator+Bundle.md2htmlymlRes));
                 // add config block lines
                 partAll.add(0, "---");
                 partAll.add("---");
             }
+            ArrayList<String> yamlLinesToSave = new ArrayList<>();
+            {
+                for (String line : partAll) {
+                    int idx = line.indexOf(":");
+                    if (idx >0) {
+                        String key = line.substring(0, idx);
+                        if (Bundle.aliasMaps.containsKey(key)) {
+                            yamlLinesToSave.add(Bundle.aliasMaps.get(key)+line.substring(idx));
+                            continue;
+                        }
+                    }
+                    // no alias match
+                    yamlLinesToSave.add(line);
+                }
+            }
             // write merged configs out
-            Utility.dump(partAll, new File(Bundle.dotmd2htmlymlPath));
+            Utility.dump(yamlLinesToSave, new File(Bundle.dotmd2htmlymlPath));
 
             // load your res files
             if (Config.resDirPath != null) {
-                Utility.copyRes(Config.resDirPath, Bundle.resourcePath);
+                File resDir = new File(Config.resDirPath);
+                if (resDir.exists() && resDir.isDirectory()) {
+                    Utility.copyRes(Config.resDirPath, Bundle.resourcePath);
+                } else {
+                    System.out.println("[E] Invalid resource directory.");
+                }
             }
 
+            /*
             // index.html <--- index.md / README.md
             String indexMdSrc = Config.srcDirPath+File.separator+"index.md";
             List<String> indexPage = Utility.expandLines(indexMdSrc);
@@ -126,6 +150,7 @@ public class Main {
             } else {
                 System.err.println("You better have either 'index.md' or 'README.md' in the source root dir");
             }
+            */
 
             // [srcDir]->[dstDir]: copy or convert, if update needed
             for (String inputPath: Bundle.src2dst.keySet()) {
@@ -228,6 +253,8 @@ public class Main {
                 if (++i < args.length) { Config.dstDirPath = args[i]; }
             } else if (args[i].equals("-r") || args[i].equals("-res")) {
                 if (++i < args.length) { Config.resDirPath = args[i]; }
+            } else if (args[i].equals("-c") || args[i].equals("-config")) {
+                if (++i < args.length) { Config.configYaml = args[i]; }
             } else if (args[i].equals("-w") || args[i].equals("-watch")) {
                 Config.watchMode = true;
             } else if (args[i].equals("-s") || args[i].equals("-silent")) {
@@ -269,6 +296,7 @@ public class Main {
         System.err.printf("    Expand Markdown?:        %s\n", Config.expandMarkdown ? "TRUE" : "FALSE");
         System.err.printf("    Fold   Markdown?:        %s\n", Config.foldMarkdown ? "TRUE" : "FALSE");
         System.err.printf("    Generate code fragment?: %s\n", Config.generateCodeFragment ? "TRUE" : "FALSE");
+        System.err.printf("    Configuration file: %s", Config.configYaml == null ? "NO EXTRA" : Config.configYaml);
         System.err.printf("-------------------------------------\n");
     }
 }
