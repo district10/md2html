@@ -1,3 +1,4 @@
+sudo: required
 language: java
 jdk:
   - oraclejdk8
@@ -8,7 +9,7 @@ before_install:
 install:
   - mkdir -p /tmp/bin && cd /tmp/bin
   - wget $QRSYNC_URL && chmod +x qrsync
-  - wget $PANDOC_URL && ar p pandoc*.deb data.tar.gz | tar xvz --strip-components 2 -C ./
+  - wget $PANDOC_URL && sudo dpkg -i pandoc*.deb
 script:
   - cd ~/build/district10/md2html;
   - mvn -v
