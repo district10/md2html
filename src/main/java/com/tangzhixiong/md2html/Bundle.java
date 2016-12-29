@@ -12,7 +12,7 @@ public class Bundle {
     public static HashSet<String> mdExts = new HashSet<>();
     public static HashSet<String> markupExts = new HashSet<>();
     public static HashMap<String, String> aliasMaps = new HashMap<>();
-
+    public static Vector<ArrayList<String>> inclusionLogs = new Vector<>();
     static {
         String[] mdExtsString = {
                 "Rmd",
@@ -131,9 +131,6 @@ public class Bundle {
                 }
             }
             stillInBasedir = false;
-        }
-        for (String dir: key2dir.values()) {
-            // TODO: if no index.html was generated, generate it!
         }
     }
 

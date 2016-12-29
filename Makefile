@@ -6,9 +6,11 @@ clean:
 	rm -rf publish/ target/
 test: publish/md2html.jar
 	make -C src/test
-	java -jar $< -i src/test/output -o publish -fve
-	java -jar $< -i src/test/output -o publish/conf1 -fe -c src/test/conf1.yml
-	java -jar $< -i src/test/output -o publish/conf2 -fe -c src/test/conf2.yml
+	java -jar $< -i src/test/output -o publish -fvel
+test1: publish/md2html.jar
+	java -jar $< -i src/test/output -o publish/conf1 -fel -c src/test/conf1.yml
+test2: publish/md2html.jar
+	java -jar $< -i src/test/output -o publish/conf2 -fel -c src/test/conf2.yml
 publish/%: target/%
 	mkdir -p $(@D)
 	cp $< $@

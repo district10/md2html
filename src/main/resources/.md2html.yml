@@ -8,4 +8,5 @@ mh-js:
   - clipboard.min.js
   - main.js
 generator: pandoc+md2html.jar
+title-prefix:
 #absolute-rootdir-url: http://tangzhixiong.com/md2html

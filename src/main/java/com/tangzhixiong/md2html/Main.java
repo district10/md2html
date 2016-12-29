@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 class Config {
@@ -14,9 +13,9 @@ class Config {
     public static boolean verboseMode = false;
     public static boolean foldMarkdown = false;
     public static boolean expandMarkdown = false;
-    public static boolean generateCodeFragment = false;
     public static boolean readmeAsMainIndex = false;
     public static boolean logCommands = false;
+    public static boolean printGraph = false;
 
     public static String srcDirPath = null;
     public static String dstDirPath = null;
@@ -127,35 +126,21 @@ public class Main {
             if (Config.resDirPath != null) {
                 File resDir = new File(Config.resDirPath);
                 if (resDir.exists() && resDir.isDirectory()) {
-                    Utility.copyRes(Config.resDirPath, Bundle.resourcePath);
+                    Utility.copyResources(Config.resDirPath, Bundle.resourcePath);
                 } else {
                     System.out.println("[E] Invalid resource directory.");
                 }
             }
 
-            /*
-            // index.html <--- index.md / README.md
-            String indexMdSrc = Config.srcDirPath+File.separator+"index.md";
-            List<String> indexPage = Utility.expandLines(indexMdSrc);
-            if (indexPage.isEmpty()) {
-                Config.readmeAsMainIndex = true;
-                indexMdSrc = Config.srcDirPath+File.separator+"README.md";
-                indexPage.addAll(Utility.expandLines(indexMdSrc));
-            }
-            if (!indexPage.isEmpty()) {
-                String indexMdDst = Config.dstDirPath+File.separator+"index.md";
-                boolean isMarkdownFile = true;
-                Utility.dump(indexPage, new File(indexMdDst), isMarkdownFile);
-                Utility.md2html(indexMdDst);
-            } else {
-                System.err.println("You better have either 'index.md' or 'README.md' in the source root dir");
-            }
-            */
-
             // [srcDir]->[dstDir]: copy or convert, if update needed
             for (String inputPath: Bundle.src2dst.keySet()) {
                 String outputPath = Bundle.src2dst.get(inputPath);
                 Utility.mappingFile(inputPath, outputPath);
+            }
+
+            // a -> b, build links
+            if (Config.printGraph) {
+                Utility.printInclusionLogs();
             }
 
             // if not watchMode, done
@@ -214,7 +199,8 @@ public class Main {
     }
 
     public static void printHelp() {
-        final String helpMsg = "Usage: \n"+
+        final String helpMsg = "(TODO: update help section!!!)\n"+
+                "Usage: \n"+
                 "    $ java -jar md2html.jar\n"+
                 "\nOptions:\n"+
                 "    -i, -input <SOURCE DIRECTORY>\n"+
@@ -231,8 +217,6 @@ public class Main {
                 "           expand markdown files\n"+
                 "    -f, -fold\n"+
                 "           fold markdown contents\n"+
-                "    -g, -generateCodeFragment\n"+
-                "           generate code fragment\n"+
                 "\nMore Usage Examples\n"+
                 "   1. current dir to ../publish:\n" +
                 "       $ java -jar md2html.jar -i . -o ../publish\n"+
@@ -265,8 +249,10 @@ public class Main {
                 Config.expandMarkdown = true;
             } else if (args[i].equals("-f") || args[i].equals("-fold")) {
                 Config.foldMarkdown = true;
-            } else if (args[i].equals("-g") || args[i].equals("-generateCodeFragment")) {
-                Config.generateCodeFragment = true;
+            } else if (args[i].equals("-g") || args[i].equals("-graph")) {
+                Config.printGraph = true;
+            } else if (args[i].equals("-l") || args[i].equals("-log")) {
+                Config.logCommands = true;
             } else if (args[i].startsWith("-")) {
                 for (int k = 1; k < args[i].length(); ++k) {
                     switch (args[i].charAt(k)) {
@@ -275,7 +261,8 @@ public class Main {
                         case 'v': Config.verboseMode = true; break;
                         case 'e': Config.expandMarkdown = true; break;
                         case 'f': Config.foldMarkdown = true; break;
-                        case 'g': Config.generateCodeFragment = true; break;
+                        case 'g': Config.printGraph = true; break;
+                        case 'l': Config.logCommands = true; break;
                         default:
                             System.err.println("Invalid Config: "+args[i] +", and char: "+String.valueOf(args[i].charAt(k)));
                             printHelp();
@@ -295,7 +282,6 @@ public class Main {
         System.err.printf("    Verbose Mode:            %s\n", Config.verboseMode ? "ON" : "OFF");
         System.err.printf("    Expand Markdown?:        %s\n", Config.expandMarkdown ? "TRUE" : "FALSE");
         System.err.printf("    Fold   Markdown?:        %s\n", Config.foldMarkdown ? "TRUE" : "FALSE");
-        System.err.printf("    Generate code fragment?: %s\n", Config.generateCodeFragment ? "TRUE" : "FALSE");
         System.err.printf("    Configuration file: %s", Config.configYaml == null ? "NO EXTRA" : Config.configYaml);
         System.err.printf("-------------------------------------\n");
     }

@@ -18,19 +18,19 @@ $for(mh-css-before-cdn)$
 $endfor$
     <!-- mh css before -->
 $for(mh-css-before)$
-    $if(absulote-basedir-url)$
+$if(absulote-basedir-url)$
     <link rel="stylesheet" href="$absolute-rootdir-url$/$md2htmldir$/$mh-css-before$" type="text/css" />
-    $else$
+$else$
     <link rel="stylesheet" href="$rootdir$$md2htmldir$/$mh-css-before$" type="text/css" />
-    $endif$
+$endif$
 $endfor$
     <!-- mh css -->
 $for(mh-css)$
-    $if(absulote-basedir-url)$
+$if(absulote-basedir-url)$
     <link rel="stylesheet" href="$absolute-rootdir-url$/$md2htmldir$/$mh-css$" type="text/css" />
-    $else$
+$else$
     <link rel="stylesheet" href="$rootdir$$md2htmldir$/$mh-css$" type="text/css" />
-    $endif$
+$endif$
 $endfor$
     <!-- mh css after cdn -->
 $for(mh-css-after-cdn)$
@@ -38,17 +38,18 @@ $for(mh-css-after-cdn)$
 $endfor$
     <!-- mh css after -->
 $for(mh-css-after)$
-    $if(absulote-basedir-url)$
+$if(absulote-basedir-url)$
     <link rel="stylesheet" href="$absolute-rootdir-url$/$md2htmldir$/$mh-css-after$" type="text/css" />
-    $else$
+$else$
     <link rel="stylesheet" href="$rootdir$$md2htmldir$/$mh-css-after$" type="text/css" />
-    $endif$
-$endfor$
-$if(mh-css-raw)$
-    <style>
-        $mh-css-raw$
-    </style>
 $endif$
+$endfor$
+    <!-- mh css raw -->
+    <style>
+$if(mh-css-raw)$
+        $mh-css-raw$
+$endif$
+    </style>
 $if(math)$
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
 $endif$
@@ -58,70 +59,71 @@ $if(mh-head-tail)$
 $endif$
 </head>
 <body id ="md2html-body" class="markdown-body">
-    <!-- mh nav -->
+<!-- mh nav -->
 $if(mh-nav)$
-    <input id="nav-btn" type="Button" onclick="loadIndex()">
+<input id="nav-btn" type="Button" onclick="loadIndex()">
 $endif$
-    <!-- body before -->
+<!-- body before -->
 $if(body-before)$
-    $body-before$
+$body-before$
 $endif$
-    <!-- body -->
-    $body$
-    <!-- body after -->
+<!-- body -->
+$body$
+<!-- body after -->
 $if(body-after)$
-    $body-after$
+$body-after$
 $endif$
-    <!-- mh info -->
+<!-- mh info -->
 $if(mh-info)$
-    <script>
-        var rootdir = "$rootdir$";
-        var absoluteRootdirUrl = "$absolute-rootdir-url$";
-        var thisPath = "$thispath$";
-        var pagetitle = $if(pagetitle)$"$pagetitle$"$else$"NO TITLE! (Use `title: <TITLE_NAME>' to set page title.)"$endif$;
-        var metaJson = $meta-json$;
-    </script>
+<script>
+    var rootdir = "$rootdir$";
+    var absoluteRootdirUrl = "$absolute-rootdir-url$";
+    var thisPath = "$thispath$";
+    var pagetitle = $if(pagetitle)$"$pagetitle$"$else$"NO TITLE! (Use `title: <TITLE_NAME>' to set page title.)"$endif$;
+    var metaJson = $meta-json$;
+</script>
 $endif$
-    <!-- mh js before cdn -->
+<!-- mh js before cdn -->
 $for(mh-js-before-cdn)$
-    <script src="$mh-js-before-cdn$"></script>
+<script src="$mh-js-before-cdn$"></script>
 $endfor$
-    <!-- mh js before -->
+<!-- mh js before -->
 $for(mh-js-before)$
-    $if(absulote-basedir-url)$
-    <script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js-before$"></script>
-    $else$
-    <script src="$rootdir$$md2htmldir$/$mh-js-before$"></script>
-    $endif$
-$endfor$
-    <!-- mh js -->
-$for(mh-js)$
-    $if(absulote-basedir-url)$
-    <script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js$"></script>
-    $else$
-    <script src="$rootdir$$md2htmldir$/$mh-js$"></script>
-    $endif$
-$endfor$
-    <!-- mh js after cdn -->
-$for(mh-js-after-cdn)$
-    $if(absulote-basedir-url)$
-    <script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js-after-cdn$"></script>
-    $else$
-    <script src="$rootdir$$md2htmldir$/$mh-js-after-cdn$"></script>
-    $endif$
-$endfor$
-    <!-- mh js after -->
-$for(mh-js-after)$
-    $if(absulote-basedir-url)$
-    <script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js-after$"></script>
-    $else$
-    <script src="$rootdir$$md2htmldir$/$mh-js-after$"></script>
-    $endif$
-$endfor$
-$if(mh-js-raw)$
-    <style>
-        $mh-js-raw$
-    </style>
+$if(absulote-basedir-url)$
+<script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js-before$"></script>
+$else$
+<script src="$rootdir$$md2htmldir$/$mh-js-before$"></script>
 $endif$
+$endfor$
+<!-- mh js -->
+$for(mh-js)$
+$if(absulote-basedir-url)$
+<script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js$"></script>
+$else$
+<script src="$rootdir$$md2htmldir$/$mh-js$"></script>
+$endif$
+$endfor$
+<!-- mh js after cdn -->
+$for(mh-js-after-cdn)$
+$if(absulote-basedir-url)$
+<script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js-after-cdn$"></script>
+$else$
+<script src="$rootdir$$md2htmldir$/$mh-js-after-cdn$"></script>
+$endif$
+$endfor$
+<!-- mh js after -->
+$for(mh-js-after)$
+$if(absulote-basedir-url)$
+<script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js-after$"></script>
+$else$
+<script src="$rootdir$$md2htmldir$/$mh-js-after$"></script>
+$endif$
+$endfor$
+<!-- mh js raw -->
+<script>
+$if(mh-js-raw)$
+    $mh-js-raw$
+$endif$
+</script>
 </body>
 </html>

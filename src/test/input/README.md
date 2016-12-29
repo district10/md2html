@@ -50,5 +50,9 @@ formats/index.md
 
 ## config
 
--   [conf1](conf1/index.html)
--   [conf2](conf2/index.html)
+-   [conf1](conf1/index.html) 关闭了 CSS `mh-css:`
+-   [conf2](conf2/index.html) 关闭了 CSS `mh-js:`
+
+查看本文：
+
+    @include <-=README.md=

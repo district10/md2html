@@ -8,7 +8,15 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Utility {
-    public static void copyRes(String srcDirPath, String dstDirPath) {
+    public static void printInclusionLogs() {
+        if (Bundle.inclusionLogs.size() > 0) {
+            System.out.println("Inclusion statistics:");
+            for (ArrayList<String> inclusionLog : Bundle.inclusionLogs) {
+                System.out.println("    "+inclusionLog);
+            }
+        }
+    }
+    public static void copyResources(String srcDirPath, String dstDirPath) {
         final ArrayDeque<File> queue = new ArrayDeque<>();
         queue.add(new File(srcDirPath));
         while (!queue.isEmpty()) {
@@ -87,17 +95,19 @@ public class Utility {
             if (!Config.silentMode) {
                 System.out.printf("[P] %s -> %s\n", outputPath, outputPathHTML);
             }
-            if (Config.verboseMode) {
+            if (Config.logCommands) {
                 System.out.println(cmds);
             }
             Process p = new ProcessBuilder().inheritIO().command(cmds).start();
             try {
                 p.waitFor(10, TimeUnit.SECONDS);
+                // ArrayList<String> cmds2 = new ArrayList<>(); cmds2.add("cat"); cmds2.add(outputPath);
+                // Process p2 = new ProcessBuilder().inheritIO().command(cmds2).start();
+                // p2.waitFor(10, TimeUnit.SECONDS);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -110,7 +120,6 @@ public class Utility {
     }
 
     public static void mappingFile(String inputPath, String outputPath) {
-        // write log
         //  [+] 'D:\tzx\git\md2html\README.md' -> 'D:\tzx\git\md2html-publish\README.html'
         mappingFile(inputPath, outputPath, !Config.silentMode);
     }
@@ -134,35 +143,24 @@ public class Utility {
                         if (writeLog) {
                             System.out.printf("[C] %s -> %s\n", inputPath, outputPath);
                         }
-                        Files.copy(inputFile.toPath(), outputFile.toPath()
-                                , StandardCopyOption.REPLACE_EXISTING
-                                , StandardCopyOption.COPY_ATTRIBUTES);
+                        Files.copy(inputFile.toPath(), outputFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
                     } else {
-                        InclusionParams params = new InclusionParams();
                         String filename = inputFile.getCanonicalPath();
-                        List<String> lines = expandLines(filename, params, isMdFile);
+                        List<String> lines = expandLines(filename);
                         if (writeLog) {
                             System.out.printf("[E] %s -> %s\n", inputPath, outputPath);
                         }
                         dump(lines, outputFile, isMdFile);
                     }
-                    // TODO: update entry in search.xml
                     // dst/dir/file.md -> dst/dir/file.html
                     md2html(outputPath);
                 } else {
                     if (writeLog) {
                         System.out.printf("[C] %s -> %s\n", inputPath, outputPath);
                     }
-                    Files.copy(inputFile.toPath(), outputFile.toPath()
-                            , StandardCopyOption.REPLACE_EXISTING
-                            , StandardCopyOption.COPY_ATTRIBUTES);
+                    Files.copy(inputFile.toPath(), outputFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
                 }
-                // have already copied, if code snippet, and you want to generate code fragment, then do it
-                if (Config.generateCodeFragment) {
-                    generateCodeFragmentIfPossible(outputPath);
-                }
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
@@ -242,68 +240,6 @@ public class Utility {
         }
     }
 
-    /*
-    abc, actionscript, ada, agda, apache, asn1, asp, awk, bash, bibtex, boo, c,
-    changelog, clojure, cmake, coffee, coldfusion, commonlisp, cpp, cs, css,
-    curry, d, diff, djangotemplate, dockerfile, dot, doxygen, doxygenlua, dtd,
-    eiffel, elixir, email, erlang, fasm, fortran, fsharp, gcc, glsl,
-    gnuassembler, go, hamlet, haskell, haxe, html, idris, ini, isocpp, java,
-    javadoc, javascript, json, jsp, julia, kotlin, latex, lex, lilypond,
-    literatecurry, literatehaskell, llvm, lua, m4, makefile, mandoc, markdown,
-    mathematica, matlab, maxima, mediawiki, metafont, mips, modelines, modula2,
-    modula3, monobasic, nasm, noweb, objectivec, objectivecpp, ocaml, octave,
-    opencl, pascal, perl, php, pike, postscript, prolog, pure, python, r,
-    relaxng, relaxngcompact, rest, rhtml, roff, ruby, rust, scala, scheme, sci,
-    sed, sgml, sql, sqlmysql, sqlpostgresql, tcl, tcsh, texinfo, verilog, vhdl,
-    xml, xorg, xslt, xul, yacc, yaml, zsh
-    */
-    public static void generateCodeFragmentIfPossible(String outputPath) {
-        int cut = outputPath.lastIndexOf(".");
-        if (cut >= 0) {
-            switch (outputPath.substring(cut)) {
-                // Java
-                case ".java":
-                    updateCodeFragmentIfNecessary(outputPath, "java", outputPath+".html");
-                    break;
-                // C++
-                case ".h": case ".cpp": case ".cc": case ".hpp":
-                    updateCodeFragmentIfNecessary(outputPath, "cpp", outputPath+".html");
-                    break;
-                // Python
-                case ".py":
-                    updateCodeFragmentIfNecessary(outputPath, "python", outputPath+".html");
-                    break;
-                // Perl
-                case ".pl":
-                    updateCodeFragmentIfNecessary(outputPath, "perl", outputPath+".html");
-                    break;
-                // JavaScript
-                case ".js":
-                    updateCodeFragmentIfNecessary(outputPath, "javascript", outputPath+".html");
-                    break;
-                // JSON
-                case ".json":
-                    updateCodeFragmentIfNecessary(outputPath, "json", outputPath+".html");
-                    break;
-                // CSS
-                case ".css":
-                    updateCodeFragmentIfNecessary(outputPath, "css", outputPath+".html");
-                    break;
-                // Makefile
-                case ".mk":
-                    updateCodeFragmentIfNecessary(outputPath, "makefile", outputPath+".html");
-                    break;
-                // YAML
-                case ".yml": case ".yaml":
-                    updateCodeFragmentIfNecessary(outputPath, "yml", outputPath+".html");
-                    break;
-                default:
-                    // System.out.println("Maybe you `md2html` should support this kind of file: *"+input.substring(cut));
-                    ;
-            }
-        }
-    }
-
     public static boolean canExpandLine(String line, InclusionParams params) {
         if (!line.endsWith("=")) { return false; }
         int idx = line.indexOf("@include <-=");
@@ -357,7 +293,6 @@ public class Utility {
         }
     }
 
-    // inputPath is a CanonicalPath, params is for INPUT
     public static List<String> expandLines(String inputPath, InclusionParams params, boolean needExpansion) {
         if (!needExpansion) {
             return getLinesNaive(inputPath);
@@ -375,17 +310,11 @@ public class Utility {
             return lines;
         }
         if (params.parents.contains(filename)) {
+            String errLog = params.getErrorLog(filename);
             System.err.printf("Loop detected, %s will not be included.\n", inputPath);
-            StringBuilder sb = new StringBuilder();
-            sb.append("\n```\nLOOP->-[");
-            for (String path: params.parents) {
-                sb.append(path);
-                sb.append("]\n        ");
-            }
-            sb.append(inputPath);
-            sb.append("]->-| LOOP |\n```\n");
-            lines.add(sb.toString());
-            System.err.println(sb.toString());
+            System.err.println(errLog);
+            lines.add(errLog); // print to markdown, so you can check these errors
+            Bundle.inclusionLogs.add(params.getInclusionInfo());
             return lines;
         }
         try (
@@ -397,16 +326,22 @@ public class Utility {
                 InclusionParams paramsAnother = new InclusionParams();
                 if (canExpandLine(line, paramsAnother)) {
                     String otherfilepath = basename+File.separator+paramsAnother.path;
+                    List<String> moreLines = null;
                     try {
                         otherfilepath = new File(otherfilepath).getCanonicalPath();
-                        List<String> moreLines = expandLines(otherfilepath, params, isMarkdownFile(otherfilepath));
+                        if (filename.equals(otherfilepath)) {
+                            moreLines = getLinesNaive(otherfilepath);
+                        } else {
+                            moreLines = expandLines(otherfilepath, params, isMarkdownFile(otherfilepath));
+                        }
                         if (moreLines != null && moreLines.size() > 0) {
+                            Bundle.inclusionLogs.add(params.getInclusionInfo());
+                            ArrayList<String> log = new ArrayList<>();
                             for (String ml: moreLines) {
                                 lines.add(params.pad + paramsAnother.pad + ml);
                             }
                         }
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         e.printStackTrace();
                         continue;
                     }
@@ -503,5 +438,25 @@ class InclusionParams {
         pad = "";
         path = "";
         parents = new LinkedHashSet<>();
+    }
+    public String getErrorLog(String filename) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n```\nLOOP: [ ");
+        for (String path: parents) {
+            if (path.equals(filename)) {
+                sb.append(path); sb.append(" <---\n        ");
+            } else {
+                sb.append(path); sb.append("\n        ");
+            }
+        }
+        sb.append(filename); sb.append(" <---\n]\n```\n");
+        return sb.toString();
+    }
+    public ArrayList<String> getInclusionInfo() {
+        ArrayList<String> log = new ArrayList<>();
+        for (String path: parents) {
+            log.add(path);
+        }
+        return log;
     }
 }

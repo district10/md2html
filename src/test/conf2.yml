@@ -1,3 +1,5 @@
 generator: conf2
 keywords:
 mh-js:
+mh-nav: false
+title-prefix: （关闭 JS）
