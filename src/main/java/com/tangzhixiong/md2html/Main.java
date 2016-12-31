@@ -16,6 +16,7 @@ class Config {
     public static boolean readmeAsMainIndex = false;
     public static boolean logCommands = false;
     public static boolean printGraph = false;
+    public static boolean hasIconv = false;
 
     public static String srcDirPath = null;
     public static String dstDirPath = null;
@@ -28,11 +29,20 @@ public class Main {
         try {
             System.out.print("[L] Checking pandoc...");
             Process p = new ProcessBuilder().command(new String[]{"pandoc", "-v"}).start();
-            p.waitFor(1, TimeUnit.SECONDS);
+            p.waitFor(5, TimeUnit.SECONDS);
             System.out.print(" done. [Pandoc Installed]\n");
         } catch (Exception e) {
             System.out.println("[X] Missing pandoc, go download at: \"http://pandoc.org/\"");
             System.exit(0);
+        }
+        try {
+            System.out.print("[L] Checking iconv...");
+            Process p = new ProcessBuilder().command(new String[]{"iconv", "--version"}).start();
+            p.waitFor(5, TimeUnit.SECONDS);
+            System.out.print(" done. [Iconv Installed]\n");
+            Config.hasIconv = true;
+        } catch (Exception e) {
+            System.out.println("[X] Missing iconv, you better get one.");
         }
 
         try {

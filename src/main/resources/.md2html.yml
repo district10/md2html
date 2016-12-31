@@ -1,5 +1,6 @@
 mh-info: true
 mh-nav: true
+mh-native: true
 mh-css:
   - main.css
 mh-js:

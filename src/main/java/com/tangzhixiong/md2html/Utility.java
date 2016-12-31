@@ -2,12 +2,37 @@ package com.tangzhixiong.md2html;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Utility {
+    public static void clean(String inputPath) {
+        clean(inputPath, inputPath);
+    }
+    public static void clean(String inputPath, String outputPath) {
+        if (!Config.hasIconv) {
+            return;
+        }
+        try {
+            File temp = File.createTempFile("iconv-"+outputPath.hashCode()+"-", ".txt");
+            System.out.println(temp.getCanonicalPath());
+            ProcessBuilder pb = new ProcessBuilder().command(new String[]{
+                    "iconv",
+                    "-f", "utf-8",
+                    "-t", "utf-8",
+                    "-c", inputPath
+            });
+            pb.redirectOutput(temp);
+            Process p = pb.start();
+            p.waitFor(5, TimeUnit.SECONDS);
+            Files.move(temp.toPath(), new File(outputPath).toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (Exception e) {
+        }
+    }
+
     public static void printInclusionLogs() {
         if (Bundle.inclusionLogs.size() > 0) {
             System.out.println("Inclusion statistics:");
@@ -18,7 +43,20 @@ public class Utility {
     }
     public static void copyResources(String srcDirPath, String dstDirPath) {
         final ArrayDeque<File> queue = new ArrayDeque<>();
-        queue.add(new File(srcDirPath));
+        File srcDir = new File(srcDirPath);
+        File dstDir = new File(dstDirPath);
+        if (!srcDir.exists() || !srcDir.isDirectory()) {
+            return;
+        }
+        if (!dstDir.exists()) { dstDir.mkdirs(); }
+        if (dstDir.isFile()) { return; }
+        try {
+            srcDirPath = srcDir.getCanonicalPath();
+            dstDirPath = dstDir.getCanonicalPath();
+        } catch (Exception e) {
+            return;
+        }
+        queue.add(srcDir);
         while (!queue.isEmpty()) {
             File pwd = queue.poll();
             final File[] entries;
@@ -29,7 +67,7 @@ public class Utility {
                 if (entry.isFile()) {
                     try {
                         final String srcFilePath = entry.getCanonicalPath();
-                        final String dstFilePath = srcFilePath.replaceFirst(srcDirPath, dstDirPath);
+                        final String dstFilePath = dstDirPath + srcFilePath.substring(srcDirPath.length());
                         mappingFile(srcFilePath, dstFilePath, !Config.silentMode);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -65,7 +103,7 @@ public class Utility {
     }
 
     public static void md2html(String outputPath) {
-        Runtime runtime = Runtime.getRuntime();
+        clean(outputPath);
         int idx = outputPath.lastIndexOf(".");
         String suffix = outputPath.substring(idx+1);
         String outputPathHTML = outputPath.substring(0, idx) + ".html";

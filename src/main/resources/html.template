@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- mh head head -->
+    <!-- mh-head-head (alias: raw-head) -->
 $if(mh-head-head)$
     $mh-head-head$
+$endif$
+$if(raw-head)$
+    $raw-head$
 $endif$
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Style-Type" content="text/css" />
@@ -12,11 +15,11 @@ $endif$
     <meta name="author" content="district10" />
     <meta name="generator" content="md2html" />
     <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
-    <!-- mh css before cdn -->
+    <!-- mh-css-before-cdn -->
 $for(mh-css-before-cdn)$
     <link rel="stylesheet" href="$mh-css-before-cdn$" type="text/css" />
 $endfor$
-    <!-- mh css before -->
+    <!-- mh-css-before -->
 $for(mh-css-before)$
 $if(absulote-basedir-url)$
     <link rel="stylesheet" href="$absolute-rootdir-url$/$md2htmldir$/$mh-css-before$" type="text/css" />
@@ -24,7 +27,7 @@ $else$
     <link rel="stylesheet" href="$rootdir$$md2htmldir$/$mh-css-before$" type="text/css" />
 $endif$
 $endfor$
-    <!-- mh css -->
+    <!-- mh-css -->
 $for(mh-css)$
 $if(absulote-basedir-url)$
     <link rel="stylesheet" href="$absolute-rootdir-url$/$md2htmldir$/$mh-css$" type="text/css" />
@@ -32,11 +35,14 @@ $else$
     <link rel="stylesheet" href="$rootdir$$md2htmldir$/$mh-css$" type="text/css" />
 $endif$
 $endfor$
-    <!-- mh css after cdn -->
+    <!-- mh-css-after-cdn (alias: remote-css )-->
 $for(mh-css-after-cdn)$
     <link rel="stylesheet" href="$mh-css-after-cdn$" type="text/css" />
 $endfor$
-    <!-- mh css after -->
+$for(remote-css)$
+    <link rel="stylesheet" href="$remote-css$" type="text/css" />
+$endfor$
+    <!-- mh-css-after (alias: local-css) -->
 $for(mh-css-after)$
 $if(absulote-basedir-url)$
     <link rel="stylesheet" href="$absolute-rootdir-url$/$md2htmldir$/$mh-css-after$" type="text/css" />
@@ -44,46 +50,57 @@ $else$
     <link rel="stylesheet" href="$rootdir$$md2htmldir$/$mh-css-after$" type="text/css" />
 $endif$
 $endfor$
-    <!-- mh css raw -->
-    <style>
-$if(mh-css-raw)$
-        $mh-css-raw$
+$for(local-css)$
+$if(absulote-basedir-url)$
+    <link rel="stylesheet" href="$absolute-rootdir-url$/$md2htmldir$/$local-css$" type="text/css" />
+$else$
+    <link rel="stylesheet" href="$rootdir$$md2htmldir$/$local-css$" type="text/css" />
 $endif$
-    </style>
+$endfor$
+    <!-- mh-css-raw (alias: raw-css) -->
+$if(mh-css-raw)$
+    $mh-css-raw$
+$endif$
+$if(raw-css)$
+    $raw-css$
+$endif$
 $if(math)$
     <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
 $endif$
-    <!-- mh head tail -->
+    <!-- mh-head-tail -->
 $if(mh-head-tail)$
     $mh-head-tail$
 $endif$
 </head>
-<body id ="md2html-body" class="markdown-body">
-<!-- mh nav -->
+<body $if(mh-native)$id ="md2html-body" class="markdown-body"$endif$>
+<!-- mh-nav (true/false, default: false) -->
 $if(mh-nav)$
 <input id="nav-btn" type="Button" onclick="loadIndex()">
 $endif$
-<!-- body before -->
+<!-- body-before -->
 $if(body-before)$
 $body-before$
 $endif$
-<!-- body -->
+<!-- body (Modify with CAUSION) -->
 $body$
-<!-- body after -->
+<!-- body-after -->
 $if(body-after)$
 $body-after$
 $endif$
-<!-- mh info -->
+<!-- mh-info (true/false, default: true) -->
 $if(mh-info)$
+<!-- <code id="mh-meta-json" style="display: none;"> $meta-json$ </code> -->
 <script>
-    var rootdir = "$rootdir$";
-    var absoluteRootdirUrl = "$absolute-rootdir-url$";
-    var thisPath = "$thispath$";
-    var pagetitle = $if(pagetitle)$"$pagetitle$"$else$"NO TITLE! (Use `title: <TITLE_NAME>' to set page title.)"$endif$;
-    var metaJson = $meta-json$;
+    var mh = {
+        "rootdir": "$rootdir$",
+        "absoluteRootdirUrl": "$absolute-rootdir-url$",
+        "thisPath": "$thispath$",
+        "files": [$for(files)$"$files$"$sep$, $endfor$],
+        "pagetitle": $if(pagetitle)$"$pagetitle$"$else$"NO TITLE! (Use `title: <TITLE_NAME>' to set page title.)"$endif$,
+    };
 </script>
 $endif$
-<!-- mh js before cdn -->
+<!-- mh-js-before-cdn -->
 $for(mh-js-before-cdn)$
 <script src="$mh-js-before-cdn$"></script>
 $endfor$
@@ -95,7 +112,7 @@ $else$
 <script src="$rootdir$$md2htmldir$/$mh-js-before$"></script>
 $endif$
 $endfor$
-<!-- mh js -->
+<!-- mh-js -->
 $for(mh-js)$
 $if(absulote-basedir-url)$
 <script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js$"></script>
@@ -103,7 +120,7 @@ $else$
 <script src="$rootdir$$md2htmldir$/$mh-js$"></script>
 $endif$
 $endfor$
-<!-- mh js after cdn -->
+<!-- mh-js-after-cdn (alias: remote-js) -->
 $for(mh-js-after-cdn)$
 $if(absulote-basedir-url)$
 <script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js-after-cdn$"></script>
@@ -111,7 +128,14 @@ $else$
 <script src="$rootdir$$md2htmldir$/$mh-js-after-cdn$"></script>
 $endif$
 $endfor$
-<!-- mh js after -->
+$for(remote-js)$
+$if(absulote-basedir-url)$
+<script src="$absolute-rootdir-url$/$md2htmldir$/$remote-js$"></script>
+$else$
+<script src="$rootdir$$md2htmldir$/$remote-js$"></script>
+$endif$
+$endfor$
+<!-- mh-js-after (alias: local-js) -->
 $for(mh-js-after)$
 $if(absulote-basedir-url)$
 <script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js-after$"></script>
@@ -119,11 +143,19 @@ $else$
 <script src="$rootdir$$md2htmldir$/$mh-js-after$"></script>
 $endif$
 $endfor$
-<!-- mh js raw -->
-<script>
+$for(local-js)$
+$if(absulote-basedir-url)$
+<script src="$absolute-rootdir-url$/$md2htmldir$/$local-js$"></script>
+$else$
+<script src="$rootdir$$md2htmldir$/$local-js$"></script>
+$endif$
+$endfor$
+<!-- mh-js-raw (alias: raw-js) -->
 $if(mh-js-raw)$
     $mh-js-raw$
 $endif$
-</script>
+$if(raw-js)$
+    $raw-js$
+$endif$
 </body>
 </html>
