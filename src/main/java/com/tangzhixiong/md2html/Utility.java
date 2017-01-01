@@ -181,7 +181,9 @@ public class Utility {
                         if (writeLog) {
                             System.out.printf("[C] %s -> %s\n", inputPath, outputPath);
                         }
-                        Files.copy(inputFile.toPath(), outputFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
+                        Files.copy(inputFile.toPath(), outputFile.toPath()
+                                , StandardCopyOption.REPLACE_EXISTING
+                                , StandardCopyOption.COPY_ATTRIBUTES);
                     } else {
                         String filename = inputFile.getCanonicalPath();
                         List<String> lines = expandLines(filename);
@@ -196,7 +198,9 @@ public class Utility {
                     if (writeLog) {
                         System.out.printf("[C] %s -> %s\n", inputPath, outputPath);
                     }
-                    Files.copy(inputFile.toPath(), outputFile.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
+                    Files.copy(inputFile.toPath(), outputFile.toPath()
+                                , StandardCopyOption.REPLACE_EXISTING
+                                , StandardCopyOption.COPY_ATTRIBUTES);
                 }
             } catch (IOException e) {
                 e.printStackTrace();

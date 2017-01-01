@@ -22,18 +22,18 @@ $('img').each(function(index){
 $("code").each(function () {
     var text = $(this).text();
     if ($(this).parent().is("pre")) {
-        var $btn = $('<button class="copy-next">Copy</button>');
+        var $btn = $('<button class="copy-me">Copy</button>');
         $btn.attr({
             "data-clipboard-text": text
         });
-        $btn.prependTo($(this).parent());
+        $btn.appendTo($(this).parent());
     } else {
         $(this).attr({
             "data-clipboard-text": text
         }).addClass("copy-me");
     }
 });
-var clipboard = new Clipboard(".copy-me, .copy-next");
+var clipboard = new Clipboard(".copy-me");
 /*
 clipboard.on('success', function(e) {
     console.info('Action:', e.action);
@@ -68,6 +68,10 @@ $('dt.drawer').on('click', function(event){
     event.stopPropagation();
 });
 $('dd').on('click', function(event){
+    var $t = $(event.target);
+    if ($t.hasClass("copy-me")) {
+        return;
+    }
     if(getSelection().toString()){ return; }
     if($('body').hasClass('locked')){ return; }
     var $dt = $(this).prev('dt');
@@ -76,7 +80,8 @@ $('dd').on('click', function(event){
             $('.focus').removeClass('focus');
             $dt.addClass('focus');
             $(this).addClass('focus');
-            return event.stopPropagation();
+            event.stopPropagation();
+            return;
         }
         $('.focus').removeClass('focus');
         $(this).addClass('focus').prev('dt').addClass('focus');

@@ -104,7 +104,7 @@ $endif$
 $for(mh-js-before-cdn)$
 <script src="$mh-js-before-cdn$"></script>
 $endfor$
-<!-- mh js before -->
+<!-- mh-js-before -->
 $for(mh-js-before)$
 $if(absulote-basedir-url)$
 <script src="$absolute-rootdir-url$/$md2htmldir$/$mh-js-before$"></script>

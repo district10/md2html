@@ -136,11 +136,6 @@ p a img:hover {
     background-color: inherit;
 }
 
-.markdown-body dl dt:first-letter {
-    font-size: 125%;
-    text-transform: uppercase;
-}
-
 img[align='left']   { padding-right:    1.5em; float: left; }
 img[align='right']  { padding-left:     1.5em; float: right; }
 
@@ -232,19 +227,22 @@ ul.focus {
   opacity: 1.0;
 }
 
-.copy-next {
-    -webkit-transition: opacity 0.3s ease-in-out;
-    -o-transition: opacity 0.3s ease-in-out;
-    transition: opacity 0.3s ease-in-out;
+button.copy-me {
+    -webkit-transition: opacity 0.8s ease-in-out;
+    -o-transition: opacity 0.8s ease-in-out;
+    transition: opacity 0.8s ease-in-out;
     opacity: 0.05;
     padding: 2px 6px;
     position: absolute;
     right: 4px;
     top: 4px;
 }
-.copy-next:hover {
+button.copy-me:hover {
     opacity: 1;
 }
 pre {
      position: relative;
+}
+pre:hover > button.copy-me {
+    opacity: 1.0;
 }
