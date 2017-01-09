@@ -68,10 +68,7 @@ $('dt.drawer').on('click', function(event){
     event.stopPropagation();
 });
 $('dd').on('click', function(event){
-    var $t = $(event.target);
-    if ($t.hasClass("copy-me")) {
-        return;
-    }
+    if ($(event.target).hasClass("copy-me")) { return; }
     if(getSelection().toString()){ return; }
     if($('body').hasClass('locked')){ return; }
     var $dt = $(this).prev('dt');
