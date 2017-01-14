@@ -2,15 +2,15 @@
 
 [![Build Status](https://travis-ci.org/district10/md2html.svg?branch=master)](https://travis-ci.org/district10/md2html)
 
-把文件夹下的 Markdown 文件，转化成 GitHub 风格的 HTML。
+把文件夹下的 Markdown 文件，转化成 GitHub 风格的 HTML。（rst、org-mode also supported）
 
 （代码高亮用了个人比较喜欢的 Pygments 风格。）
 
 ## 安装使用
 
-`jar` 文件的运行，需要 JRE（Java Runtime）的支持，可以在这里下载：[Download Free Java Software](https://java.com/en/download/)。
+`jar` 文件的运行，需要 JRE（Java Runtime）的支持，可以在这里下载：[Download Free Java Software](https://java.com/en/download/)(Linux: `sudo apt-get install openjdk-8-jdk`)。
 
-Pandoc 是内部用来转化 Markdown 的工具，下载地址：
+Pandoc 是内部用来转化 Markdown 的工具，下载地址（请使用 1.17 以上的版本）：
 
 -   Windows：<http://doi-2014.qiniudn.com/pandoc/pandoc-1.17.0.2-windows.msi> (20.4 MB)
 -   Linux：<https://github.com/jgm/pandoc/releases/download/1.17/pandoc-1.17-1-amd64.deb> (19.9 MB)，安装指令：`sudo dpkg -i pandoc*.deb`
@@ -75,8 +75,6 @@ Options:
            expand markdown files
     -f, -fold
            fold markdown contents
-    -g, -generateCodeFragment
-           generate code fragment
 
 More Usage Examples
    1. current dir to ../publish:
@@ -87,17 +85,23 @@ More Usage Examples
 
 现在默认不 watch 了。
 
-## Notice
+That's it.
 
-如果出现乱码，请在运行 jar 文件的时候加上：`-Dfile.encoding=utf-8`。
+## Credits
 
-参考：
+-   [Pandoc](https://github.com/jgm/pandoc)（Markdown 转化）
+-   [Github Markdown CSS](https://github.com/sindresorhus/github-markdown-css)（Github 风格的 CSS）
+-   jQuery，lazyload.js（图片延迟加载）
+-   [我的笔记本](http://tangzx.qiniudn.com/notes/)（使用类似方法生成的 HTML，我复用了自己笔记的 js，css 以及 HTML 模板）
+-   clipboard.js, etc.
 
--   [utf 8 - Setting the default Java character encoding? - Stack Overflow](http://stackoverflow.com/questions/361975/setting-the-default-java-character-encoding)
+---
+
+These are for myself:
 
 ## Tips
 
-Clip on `<code>...</code>` to copy it to your clipboard.
+Click on `<code>...</code>` to copy it to your clipboard.
 
 位置标记：
 
@@ -180,13 +184,3 @@ mh-css:
     -   自动 tagging 功能
 
 最后，最重要的 TODO：不要 dive into this project。Try WebSock intead！学 Java，要全面不能囿于一室。
-
-其他格式的处理，比如 org-mode。
-
-## Credits
-
--   [Pandoc](https://github.com/jgm/pandoc)（Markdown 转化）
--   [Github Markdown CSS](https://github.com/sindresorhus/github-markdown-css)（Github 风格的 CSS）
--   jQuery，lazyload.js（图片延迟加载）
--   [我的笔记本](http://tangzx.qiniudn.com/notes/)（使用类似方法生成的 HTML，我复用了自己笔记的 js，css 以及 HTML 模板）
--   clipboard.js, etc.
